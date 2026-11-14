@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import type { CatalogResponse } from "../../api/simulation.types";
 import { createDataSource, type DataSource, type DemoPackIndex } from "../../data/dataSource";
+import { useI18n } from "../../i18n/context";
 import { Comparisons } from "./Comparisons";
 import { DailyCharts, RepToggle } from "./DailyCharts";
 import { seasonLabel, type RepKey } from "./daily";
@@ -29,9 +30,13 @@ function useDataSource(): DataSource | Error {
 }
 
 export function SimulatePage() {
+  const { t, lang } = useI18n();
   const sourceOrError = useDataSource();
   const source = sourceOrError instanceof Error ? null : sourceOrError;
   const [form, setForm] = useState<FormState>(DEFAULT_FORM);
+  // Último formulário enviado. Simulação = (submitted, lang): trocar o idioma reexecuta o MESMO cenário
+  // para os textos do motor (avisos, premissas, métodos) virem no novo idioma; os números não mudam.
+  const [submitted, setSubmitted] = useState<FormState>(DEFAULT_FORM);
   const [grid, setGrid] = useState<DemoPackIndex | null>(null);
   const [catalog, setCatalog] = useState<CatalogResponse | null>(null);
   const [rep, setRep] = useState<RepKey>("typical");
@@ -55,19 +60,19 @@ export function SimulatePage() {
     return () => ctrl.abort();
   }, [source]);
 
-  // Primeira simulação com os valores padrão (soja 20/10, argiloso, sequeiro).
+  // Primeira simulação (soja 20/10, argiloso, sequeiro), cada envio e cada troca de idioma.
   useEffect(() => {
-    if (source) run(toRequest(DEFAULT_FORM, source.kind));
-  }, [source, run]);
+    if (source) run(toRequest(submitted, source.kind, lang));
+  }, [source, run, submitted, lang]);
 
   if (!source) {
-    return <div className="status status--error" role="alert"><h3>Configuração inválida</h3><p>{(sourceOrError as Error).message}</p></div>;
+    return <div className="status status--error" role="alert"><h3>{t.page.config_invalid}</h3><p>{(sourceOrError as Error).message}</p></div>;
   }
 
   const submit = () => {
     playback.stop();
     setDas(null);
-    run(toRequest(form, source.kind));
+    setSubmitted({ ...form }); // objeto novo: reenvia mesmo sem mudança (ex.: "tentar de novo")
   };
   const fieldErrors = state.error?.kind === "invalid_input" ? state.error.fields : {};
   const result = state.result;
@@ -76,24 +81,24 @@ export function SimulatePage() {
   return (
     <div className="sim-layout">
       <aside className="sim-aside">
-        <h2 className="aside-title">Simular safra</h2>
-        <p className="hint">Fonte: <code>{source.describe()}</code></p>
+        <h2 className="aside-title">{t.page.aside_title}</h2>
+        <p className="hint">{t.page.source}: <code>{source.describe()}</code></p>
         <SimulationForm mode={source.kind} grid={grid} catalog={catalog} form={form} onChange={setForm}
                         onSubmit={submit} fieldErrors={fieldErrors} loading={state.loading} />
       </aside>
 
       <section className="sim-results" aria-live="polite" aria-busy={state.loading}>
-        {state.loading && !result && <p className="status status--loading" role="status">Simulando 24 safras…</p>}
+        {state.loading && !result && <p className="status status--loading" role="status">{t.page.loading}</p>}
         {state.error && <StatusMessage error={state.error} source={source} onRetry={submit} />}
 
         {result && response && (
           <div className={state.stale ? "is-stale" : undefined}>
-            {state.stale && <p className="status status--loading" role="status">Atualizando…</p>}
+            {state.stale && <p className="status status--loading" role="status">{t.page.updating}</p>}
             <ResultHeader result={result} />
             {response.status === "no_data" ? (
               <div className="status status--info" role="status">
-                <h3>Sem dados para este período</h3>
-                <p>Nenhuma safra completa com dados disponíveis.{response.skipped_years?.length ? ` Anos sem dados: ${response.skipped_years.join(", ")}.` : ""}</p>
+                <h3>{t.page.no_data_title}</h3>
+                <p>{t.page.no_data_body}{response.skipped_years?.length ? t.page.no_data_years(response.skipped_years.join(", ")) : ""}</p>
               </div>
             ) : (
               <>
@@ -101,7 +106,7 @@ export function SimulatePage() {
                 <PercentileCards response={response} />
                 <section aria-labelledby="daily-h" className="twin-and-charts">
                   <div className="section-head">
-                    <h3 id="daily-h" className="section-title">Gêmeo digital e água no solo, dia a dia</h3>
+                    <h3 id="daily-h" className="section-title">{t.page.twin_title}</h3>
                     <RepToggle response={response} rep={rep} onChange={(r) => { playback.stop(); setRep(r); setDas(null); }} />
                   </div>
                   {currentDas != null && (
@@ -116,8 +121,8 @@ export function SimulatePage() {
                   <DailyCharts response={response} rep={rep} das={currentDas} onDasChange={seekByUser} />
                 </section>
                 <Comparisons response={response} />
-                <Suspense fallback={<p className="status status--loading" role="status">Carregando relatórios…</p>}>
-                  <ReportPanel key={`${response.generated_at}|${result.provenance.location}`} source={source} result={result} />
+                <Suspense fallback={<p className="status status--loading" role="status">{t.page.reports_loading}</p>}>
+                  <ReportPanel key={`${response.generated_at}|${result.provenance.location}|${lang}`} source={source} result={result} />
                 </Suspense>
               </>
             )}

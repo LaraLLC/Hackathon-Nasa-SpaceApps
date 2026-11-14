@@ -1,5 +1,6 @@
 import type { CropKey, IrrigationMode, SimulationRequest, SoilKey } from "../../api/simulation.types";
 import type { DataSourceKind } from "../../data/dataSource";
+import type { Lang } from "../../i18n/dict";
 import { parseLocaleNumber } from "../../lib/format";
 import { PLACES } from "../../lib/places";
 import { CLIMATE_PRESETS, CROP_OPTIONS, type ClimatePresetKey } from "./labels";
@@ -66,7 +67,7 @@ export function fieldFromLoc(loc: (string | number)[]): FieldKey | null {
  * Monta a requisição. Economia só vai se preço OU custo foi preenchido — se faltar o outro,
  * a API devolve 422 no campo (não inventamos valor). Texto não numérico vira NaN → 422 também.
  */
-export function toRequest(form: FormState, mode: DataSourceKind): SimulationRequest {
+export function toRequest(form: FormState, mode: DataSourceKind, lang: Lang = "pt"): SimulationRequest {
   const place = PLACES.find((p) => p.ibge === form.placeIbge) ?? PLACES[0];
   const climate = mode === "fixture"
     ? { precip_delta_pct: CLIMATE_PRESETS[form.climatePreset].precip_delta_pct,
@@ -90,12 +91,13 @@ export function toRequest(form: FormState, mode: DataSourceKind): SimulationRequ
       ? {
           price_per_bag: price as number,
           cost_per_ha: cost as number,
-          price_source: form.priceSource.trim() || "informado pelo usuário",
-          cost_source: form.costSource.trim() || "informado pelo usuário",
+          price_source: form.priceSource.trim() || (lang === "pt" ? "informado pelo usuário" : "user-provided"),
+          cost_source: form.costSource.trim() || (lang === "pt" ? "informado pelo usuário" : "user-provided"),
         }
       : null,
     compare_with_baseline: true,
     compare_irrigation: true,
     include_daily: true,
+    lang, // só textos do motor; números idênticos
   };
 }

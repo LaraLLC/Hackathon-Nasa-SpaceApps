@@ -38,7 +38,7 @@ def _run(fn, req):
     except Exception as exc:  # falha do provedor de clima
         name = type(exc).__name__
         if "HTTP" in name or "Timeout" in name or "Connect" in name:
-            raise HTTPException(status_code=503, detail=f"NASA POWER indisponível: {name}") from exc
+            raise HTTPException(status_code=503, detail=f"NASA POWER unavailable: {name}") from exc
         raise
 
 

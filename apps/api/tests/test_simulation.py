@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import date, timedelta
 
 import pytest
@@ -146,6 +147,48 @@ def test_report_reference_yield_is_exact():
     out = simulate(_req(crop="maize_safrinha", sowing_date="03-10", soil="loam", climate={"precip_delta_pct": -20}))
     assert out["crop"]["reference_yield_kg_ha"] == CROPS["maize_safrinha"].reference_yield_kg_ha
     assert f"Rendimento de referência: {CROPS['maize_safrinha'].reference_yield_kg_ha:.0f} kg/ha" in build_report(out, "technical")
+
+
+TEXT_FIELDS = {"warnings", "assumptions", "indicator_methods", "engine", "lang", "generated_at", "request"}
+PT_CHARS = re.compile(r"[ãõçáéíóúâêôà]|\b(não|são|safra|Rendimento|Solo|chuva|semeadura)\b", re.IGNORECASE)
+
+
+@pytest.mark.parametrize("crop,sow,soil", [("soy", "10-20", "clay"), ("maize_safrinha", "03-10", "loam"),
+                                           ("coffee", "09-01", "clay")])
+def test_lang_changes_only_text(crop, sow, soil):
+    kw = dict(crop=crop, sowing_date=sow, soil=soil, climate={"precip_delta_pct": -20, "temp_delta_c": 1.5},
+              compare_irrigation=True)
+    pt, en = simulate(_req(**kw)), simulate(_req(lang="en", **kw))
+    assert set(pt) == set(en)
+    for k in set(pt) - TEXT_FIELDS - {"data_access", "source_refs"}:
+        assert pt[k] == en[k], f"campo numérico/estrutural mudou com o idioma: {k}"
+    # série sintética recebe retrieved_at = agora a cada chamada (carimbo de hora, não resultado)
+    strip = lambda d: {k: v for k, v in d.items() if k != "retrieved_at"}  # noqa: E731
+    assert strip(pt["data_access"]) == strip(en["data_access"])
+    assert len(pt["source_refs"]) == len(en["source_refs"])
+    assert {k: v for k, v in pt["request"].items() if k != "lang"} == {k: v for k, v in en["request"].items() if k != "lang"}
+    assert len(pt["warnings"]) == len(en["warnings"]) and len(pt["assumptions"]) == len(en["assumptions"])
+    assert set(pt["indicator_methods"]) == set(en["indicator_methods"])
+    for txt in [*en["warnings"], *en["assumptions"], *en["indicator_methods"].values(), en["engine"], en["soil"]["name_en"]]:
+        assert not PT_CHARS.search(txt), f"texto EN com português: {txt}"
+
+
+def test_pt_texts_unchanged():
+    out = simulate(_req())
+    soil = SOILS["clay"]
+    assert out["assumptions"] == list(CROPS["soy"].assumptions) + [
+        f"Solo '{soil.name_pt}': CC {soil.theta_fc}, PMP {soil.theta_wp} m³/m³, CN {soil.curve_number} (FAO-56 tab. 19, valores centrais).",
+        "Raiz cresce linearmente até o início da fase intermediária; solo novo explorado em capacidade de campo.",
+    ]
+    assert "Rendimento de referência padrão (4000 kg/ha) é placeholder; calibre com IBGE/PAM do município." in out["warnings"]
+
+
+@pytest.mark.parametrize("kind", ["technical", "commercial"])
+def test_english_report_fully_english(kind):
+    out = simulate(_req(lang="en", climate={"precip_delta_pct": -20}, compare_irrigation=True, economics=None))
+    md = build_report(out, kind, lang="en")
+    bad = [line for line in md.splitlines() if PT_CHARS.search(line)]
+    assert not bad, bad
 
 
 def test_coffee_flagged_conceptual():

@@ -2,7 +2,7 @@
  "kind": "gaiapus-demo-pack",
  "model_version": "gaiapus-sim-0.1.0",
  "data_version": "nasa_power:2001-01-01..2025-12-31",
- "generated_at": "2026-11-14T18:12:43.998245+00:00",
+ "generated_at": "2026-11-14T18:30:44.367365+00:00",
  "location": {
   "lat": -18.92,
   "lon": -48.28,
@@ -65,6 +65,10 @@
  "entries": [
   {
    "file": "soy_1001_baseline_rainfed.json",
+   "files": {
+    "pt": "soy_1001_baseline_rainfed.json",
+    "en": "soy_1001_baseline_rainfed.en.json"
+   },
    "crop": "soy",
    "sowing_date": "10-01",
    "soil": "clay",
@@ -75,8 +79,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3976.95,
-   "bytes": 136388,
-   "sha256": "e05a996592d242f14b3f5de2bf9f1b9c523cc3d6e34566d1cb5eaa968cac71d7",
+   "sha256": "071e43a3b834a25273bf2dde2585aa837f22fed059b596b84f4e00b514b5d76a",
+   "sha256_by_lang": {
+    "pt": "071e43a3b834a25273bf2dde2585aa837f22fed059b596b84f4e00b514b5d76a",
+    "en": "db1a47c097eafe00c3f4a8b3ea88ea1e813706c42150eb3022ba0fa05f785638"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1001_baseline_rainfed.technical.pt.md",
@@ -90,6 +97,10 @@
   },
   {
    "file": "soy_1001_baseline_deficit.json",
+   "files": {
+    "pt": "soy_1001_baseline_deficit.json",
+    "en": "soy_1001_baseline_deficit.en.json"
+   },
    "crop": "soy",
    "sowing_date": "10-01",
    "soil": "clay",
@@ -100,8 +111,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3999.6,
-   "bytes": 136130,
-   "sha256": "8c1adcdb343592d0da9f867127e62fb9927703d5e8abe3983b76ef8f8e6ec97a",
+   "sha256": "0f29ef469e0442ec34ab88c9e0fd14fd5a9c282ecba1c310c6f9814c665ed6dc",
+   "sha256_by_lang": {
+    "pt": "0f29ef469e0442ec34ab88c9e0fd14fd5a9c282ecba1c310c6f9814c665ed6dc",
+    "en": "461007a16581e68400fd73522568790b0d381e88276453a2f394bdf6aa627ca8"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1001_baseline_deficit.technical.pt.md",
@@ -115,6 +129,10 @@
   },
   {
    "file": "soy_1001_dry_warm_rainfed.json",
+   "files": {
+    "pt": "soy_1001_dry_warm_rainfed.json",
+    "en": "soy_1001_dry_warm_rainfed.en.json"
+   },
    "crop": "soy",
    "sowing_date": "10-01",
    "soil": "clay",
@@ -125,8 +143,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3841.7,
-   "bytes": 137485,
-   "sha256": "c4f378d2eb0171c82af3aa6a0007a2193ce607a2c4fc92e433b0de3df2966073",
+   "sha256": "c48b6792de7159f7f70f4dd78c96d48c2c101aa0079dedee00f0c73f7b2dd546",
+   "sha256_by_lang": {
+    "pt": "c48b6792de7159f7f70f4dd78c96d48c2c101aa0079dedee00f0c73f7b2dd546",
+    "en": "a45725e1b5c3d5015872b8b3c030bfab7cef522d7a86fff8807c8395216d30d8"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1001_dry_warm_rainfed.technical.pt.md",
@@ -140,6 +161,10 @@
   },
   {
    "file": "soy_1001_dry_warm_deficit.json",
+   "files": {
+    "pt": "soy_1001_dry_warm_deficit.json",
+    "en": "soy_1001_dry_warm_deficit.en.json"
+   },
    "crop": "soy",
    "sowing_date": "10-01",
    "soil": "clay",
@@ -150,8 +175,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3994.6,
-   "bytes": 137276,
-   "sha256": "b6e1c961af6e22a25c05a622f1fb669ae762af819469dc7f0304232c2bc79d2f",
+   "sha256": "8afbe98059fd0782601d2d6ecdc97d6e80719679c936dfdf759655162fa9bf4a",
+   "sha256_by_lang": {
+    "pt": "8afbe98059fd0782601d2d6ecdc97d6e80719679c936dfdf759655162fa9bf4a",
+    "en": "8f230798b7158a1bf6ec9dd4ebb10cd5c85cef74dacb95a3068234a828b97c6e"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1001_dry_warm_deficit.technical.pt.md",
@@ -165,6 +193,10 @@
   },
   {
    "file": "soy_1020_baseline_rainfed.json",
+   "files": {
+    "pt": "soy_1020_baseline_rainfed.json",
+    "en": "soy_1020_baseline_rainfed.en.json"
+   },
    "crop": "soy",
    "sowing_date": "10-20",
    "soil": "clay",
@@ -175,8 +207,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 4000.0,
-   "bytes": 135873,
-   "sha256": "bb52f371cc441f72c86b2194c838d18d80e035733e571f217847751993f0a291",
+   "sha256": "83af8c0ad1ba833b8c83db882cc38f72cd174379dac100cb75b7aa10cdfb3a3c",
+   "sha256_by_lang": {
+    "pt": "83af8c0ad1ba833b8c83db882cc38f72cd174379dac100cb75b7aa10cdfb3a3c",
+    "en": "6664c872256c6169a16b9625a427aea331dee9710a19218ebe9fbc876df9e2c8"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1020_baseline_rainfed.technical.pt.md",
@@ -190,6 +225,10 @@
   },
   {
    "file": "soy_1020_baseline_deficit.json",
+   "files": {
+    "pt": "soy_1020_baseline_deficit.json",
+    "en": "soy_1020_baseline_deficit.en.json"
+   },
    "crop": "soy",
    "sowing_date": "10-20",
    "soil": "clay",
@@ -200,8 +239,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 4000.0,
-   "bytes": 135774,
-   "sha256": "894a89940a36185bcfac84db15f65c4dc3d3d97b108f413e5b531481cd2072df",
+   "sha256": "ef32fee1232e24b590f653506da070819e147e94f0dc87fc4280144ae674d3e5",
+   "sha256_by_lang": {
+    "pt": "ef32fee1232e24b590f653506da070819e147e94f0dc87fc4280144ae674d3e5",
+    "en": "fa4b56dc1968ad5a245490806da8b1a345b00a75a2938bf8d774381d87235a15"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1020_baseline_deficit.technical.pt.md",
@@ -215,6 +257,10 @@
   },
   {
    "file": "soy_1020_dry_warm_rainfed.json",
+   "files": {
+    "pt": "soy_1020_dry_warm_rainfed.json",
+    "en": "soy_1020_dry_warm_rainfed.en.json"
+   },
    "crop": "soy",
    "sowing_date": "10-20",
    "soil": "clay",
@@ -225,8 +271,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3982.6,
-   "bytes": 137002,
-   "sha256": "0dbb6e6b8b3fb91de8e46ad12e3d5f5033628223135fe04604e56a7f6406dda5",
+   "sha256": "c211688ce5bf4ba88061e5727275aa1da8de11097386373ca3db854053bac9ce",
+   "sha256_by_lang": {
+    "pt": "c211688ce5bf4ba88061e5727275aa1da8de11097386373ca3db854053bac9ce",
+    "en": "4ae8778aec34a261ad18ddcdaf043463ed934244d0270b385e46dbe06bc6dce3"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1020_dry_warm_rainfed.technical.pt.md",
@@ -240,6 +289,10 @@
   },
   {
    "file": "soy_1020_dry_warm_deficit.json",
+   "files": {
+    "pt": "soy_1020_dry_warm_deficit.json",
+    "en": "soy_1020_dry_warm_deficit.en.json"
+   },
    "crop": "soy",
    "sowing_date": "10-20",
    "soil": "clay",
@@ -250,8 +303,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3999.6,
-   "bytes": 136752,
-   "sha256": "0677a32eb3116a29273c8cd34aad580591aa8e883958046f8f69f698fcc190e1",
+   "sha256": "0cba3b11baec82566de0620fc7ccda106ea1a3f196ba96b7c3cf2bbdd9590334",
+   "sha256_by_lang": {
+    "pt": "0cba3b11baec82566de0620fc7ccda106ea1a3f196ba96b7c3cf2bbdd9590334",
+    "en": "67041269a6d9e8ef409bd16493e67d15a8e6a58feb0ba893be5118da96195717"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1020_dry_warm_deficit.technical.pt.md",
@@ -265,6 +321,10 @@
   },
   {
    "file": "soy_1110_baseline_rainfed.json",
+   "files": {
+    "pt": "soy_1110_baseline_rainfed.json",
+    "en": "soy_1110_baseline_rainfed.en.json"
+   },
    "crop": "soy",
    "sowing_date": "11-10",
    "soil": "clay",
@@ -275,8 +335,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 4000.0,
-   "bytes": 136227,
-   "sha256": "e9aefcd36188c1ae63e344ac7ba15c9a83f9d54ced55594036d03b4e45d60cd1",
+   "sha256": "62efe1d018d4874f94fb84e400dd7913622316265ed2b855c2c91b43ccebee93",
+   "sha256_by_lang": {
+    "pt": "62efe1d018d4874f94fb84e400dd7913622316265ed2b855c2c91b43ccebee93",
+    "en": "9483c927c87fc2812c6907a3109bac22773ad80725f8fee4e839c0b0333f4358"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1110_baseline_rainfed.technical.pt.md",
@@ -290,6 +353,10 @@
   },
   {
    "file": "soy_1110_baseline_deficit.json",
+   "files": {
+    "pt": "soy_1110_baseline_deficit.json",
+    "en": "soy_1110_baseline_deficit.en.json"
+   },
    "crop": "soy",
    "sowing_date": "11-10",
    "soil": "clay",
@@ -300,8 +367,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 4000.0,
-   "bytes": 135782,
-   "sha256": "b70848b9a748901eacc3e6e17898523091a885cabc3e441b23724ce9b9e655d3",
+   "sha256": "9865cb6dab4b99f666db072a2c82fdc4dd0cf81ad3e80073753af41c4467225d",
+   "sha256_by_lang": {
+    "pt": "9865cb6dab4b99f666db072a2c82fdc4dd0cf81ad3e80073753af41c4467225d",
+    "en": "415b4a8dab0e5f71e49285c6421633c71ee4ac8e170c74fc7bc04411e906db4f"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1110_baseline_deficit.technical.pt.md",
@@ -315,6 +385,10 @@
   },
   {
    "file": "soy_1110_dry_warm_rainfed.json",
+   "files": {
+    "pt": "soy_1110_dry_warm_rainfed.json",
+    "en": "soy_1110_dry_warm_rainfed.en.json"
+   },
    "crop": "soy",
    "sowing_date": "11-10",
    "soil": "clay",
@@ -325,8 +399,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3892.35,
-   "bytes": 137108,
-   "sha256": "27a3aff913be57d2b6b64836fc3c2ee8895ed5756a8e2f6bf2f8fe6edf68003c",
+   "sha256": "9b7903b448ad7f5b72fbd37cb61d93e76a9e2682b24e394ced24970201300798",
+   "sha256_by_lang": {
+    "pt": "9b7903b448ad7f5b72fbd37cb61d93e76a9e2682b24e394ced24970201300798",
+    "en": "d175855e42a2e4e030a8f3994e474ea46fab2bcf90f607909a4a457dd78892a1"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1110_dry_warm_rainfed.technical.pt.md",
@@ -340,6 +417,10 @@
   },
   {
    "file": "soy_1110_dry_warm_deficit.json",
+   "files": {
+    "pt": "soy_1110_dry_warm_deficit.json",
+    "en": "soy_1110_dry_warm_deficit.en.json"
+   },
    "crop": "soy",
    "sowing_date": "11-10",
    "soil": "clay",
@@ -350,8 +431,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3996.3,
-   "bytes": 136796,
-   "sha256": "b2162d13abb8f8c31d20e3171f3ad60d4bafd39e005b99fdc01acc80cd499a5b",
+   "sha256": "fa5d8232612540b92578249360957830dfb9e1bc3527b8ffc0371ce0e64dcf23",
+   "sha256_by_lang": {
+    "pt": "fa5d8232612540b92578249360957830dfb9e1bc3527b8ffc0371ce0e64dcf23",
+    "en": "a1d8f727c82b611dbd996d98629b7766d5f80faf62b47a24dcc24e68d9037c67"
+   },
    "reports": {
     "technical": {
      "pt": "soy_1110_dry_warm_deficit.technical.pt.md",
@@ -365,6 +449,10 @@
   },
   {
    "file": "maize_safrinha_0201_baseline_rainfed.json",
+   "files": {
+    "pt": "maize_safrinha_0201_baseline_rainfed.json",
+    "en": "maize_safrinha_0201_baseline_rainfed.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "02-01",
    "soil": "loam",
@@ -375,8 +463,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 5218.0,
-   "bytes": 140851,
-   "sha256": "910fb99d5fec823bd3fb4abb2047c59f721596349aabc288a15b565d87b17994",
+   "sha256": "521bf14a654315c1dfd682e0a30afdd000f26d601e5863153d6d36ba7354e75f",
+   "sha256_by_lang": {
+    "pt": "521bf14a654315c1dfd682e0a30afdd000f26d601e5863153d6d36ba7354e75f",
+    "en": "195770f142666cd15ba18bac96ab78923832e9ddef5d0523baa7b54d71ce3fac"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0201_baseline_rainfed.technical.pt.md",
@@ -390,6 +481,10 @@
   },
   {
    "file": "maize_safrinha_0201_baseline_deficit.json",
+   "files": {
+    "pt": "maize_safrinha_0201_baseline_deficit.json",
+    "en": "maize_safrinha_0201_baseline_deficit.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "02-01",
    "soil": "loam",
@@ -400,8 +495,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 5997.9,
-   "bytes": 140396,
-   "sha256": "933cc425a8a659084da043505ee4de02643d7aa2eb5cad5117eeb53a37640234",
+   "sha256": "a3a413d05cd9fa3a4086e8e7f501cf82c506ae75304e6468dd58ecb4015bf053",
+   "sha256_by_lang": {
+    "pt": "a3a413d05cd9fa3a4086e8e7f501cf82c506ae75304e6468dd58ecb4015bf053",
+    "en": "7f6fc6ad25d74c2430b243489b01fa96dff2be5d7138aff2dcafd48235e71fa4"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0201_baseline_deficit.technical.pt.md",
@@ -415,6 +513,10 @@
   },
   {
    "file": "maize_safrinha_0201_dry_warm_rainfed.json",
+   "files": {
+    "pt": "maize_safrinha_0201_dry_warm_rainfed.json",
+    "en": "maize_safrinha_0201_dry_warm_rainfed.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "02-01",
    "soil": "loam",
@@ -425,8 +527,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 4704.4,
-   "bytes": 141945,
-   "sha256": "5991dadce5a4f5861a38d03f1f0d7142226753d3981b8a1f4713d7bde709e92b",
+   "sha256": "1075afd2c7f186e04ec03ceee53c9839d7530fb4571bf4e0efe6b76a15d9e480",
+   "sha256_by_lang": {
+    "pt": "1075afd2c7f186e04ec03ceee53c9839d7530fb4571bf4e0efe6b76a15d9e480",
+    "en": "55f1364c139e0914d1b88be7a499b3d6414d7b456bc2fce17d2e055e2fc9d48e"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0201_dry_warm_rainfed.technical.pt.md",
@@ -440,6 +545,10 @@
   },
   {
    "file": "maize_safrinha_0201_dry_warm_deficit.json",
+   "files": {
+    "pt": "maize_safrinha_0201_dry_warm_deficit.json",
+    "en": "maize_safrinha_0201_dry_warm_deficit.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "02-01",
    "soil": "loam",
@@ -450,8 +559,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 5994.3,
-   "bytes": 141627,
-   "sha256": "365c3a6abb41835a522b6ca98b487823c3668fca3e79f13b1643905dee0e6062",
+   "sha256": "ec4f3b5e02d66eb81b6a9b1c9aba81fb73880e5c5576822251e4a29f7804088f",
+   "sha256_by_lang": {
+    "pt": "ec4f3b5e02d66eb81b6a9b1c9aba81fb73880e5c5576822251e4a29f7804088f",
+    "en": "0388730d7dd4cde8a933fde1ce40c81afcbba4d2945e5e68dc4443bb8d9b7a6d"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0201_dry_warm_deficit.technical.pt.md",
@@ -465,6 +577,10 @@
   },
   {
    "file": "maize_safrinha_0215_baseline_rainfed.json",
+   "files": {
+    "pt": "maize_safrinha_0215_baseline_rainfed.json",
+    "en": "maize_safrinha_0215_baseline_rainfed.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "02-15",
    "soil": "loam",
@@ -475,8 +591,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 4862.85,
-   "bytes": 141078,
-   "sha256": "0ffdfa717ed5e8c91c86060afeace24627c5f41e96ff81b7f10db597e0978159",
+   "sha256": "b19ee9a822c8f2f363cc82129868bcce311ce5a7069a91ea162ce03298dd4826",
+   "sha256_by_lang": {
+    "pt": "b19ee9a822c8f2f363cc82129868bcce311ce5a7069a91ea162ce03298dd4826",
+    "en": "4fc3c282dd42328e0367ad7001b3b7cdb7ebb761523963f05ec02632ef9f1b05"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0215_baseline_rainfed.technical.pt.md",
@@ -490,6 +609,10 @@
   },
   {
    "file": "maize_safrinha_0215_baseline_deficit.json",
+   "files": {
+    "pt": "maize_safrinha_0215_baseline_deficit.json",
+    "en": "maize_safrinha_0215_baseline_deficit.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "02-15",
    "soil": "loam",
@@ -500,8 +623,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 5995.05,
-   "bytes": 140605,
-   "sha256": "69bd4628cf4ed861cb38f0fa7a3abd8b01b499f1e342d7821c858aad735a1e7c",
+   "sha256": "821e6ed6404f23ea8f36da1b2189469f67f0eef48f3bbb5c0e0fe817461a14ec",
+   "sha256_by_lang": {
+    "pt": "821e6ed6404f23ea8f36da1b2189469f67f0eef48f3bbb5c0e0fe817461a14ec",
+    "en": "8fdb955b04f45f297e55105de914f27379314e888c797176d1ef61217a3298af"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0215_baseline_deficit.technical.pt.md",
@@ -515,6 +641,10 @@
   },
   {
    "file": "maize_safrinha_0215_dry_warm_rainfed.json",
+   "files": {
+    "pt": "maize_safrinha_0215_dry_warm_rainfed.json",
+    "en": "maize_safrinha_0215_dry_warm_rainfed.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "02-15",
    "soil": "loam",
@@ -525,8 +655,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 4257.85,
-   "bytes": 141990,
-   "sha256": "d3610a59c6bff699aefdc74c0033c195f5b0c98786a542bcec12908cd5b520ac",
+   "sha256": "85cc291783abd1e27938c3b69cde077ba16e303127e75b13613242d33f66e4d3",
+   "sha256_by_lang": {
+    "pt": "85cc291783abd1e27938c3b69cde077ba16e303127e75b13613242d33f66e4d3",
+    "en": "1bff4178759a17529fcef612e4882c98fb3dd6be154c37ecbff15bd46540e729"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0215_dry_warm_rainfed.technical.pt.md",
@@ -540,6 +673,10 @@
   },
   {
    "file": "maize_safrinha_0215_dry_warm_deficit.json",
+   "files": {
+    "pt": "maize_safrinha_0215_dry_warm_deficit.json",
+    "en": "maize_safrinha_0215_dry_warm_deficit.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "02-15",
    "soil": "loam",
@@ -550,8 +687,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 5992.0,
-   "bytes": 141523,
-   "sha256": "7dfee9fee61bb826a526c4bed537cd6d6022fc7f4105a3190d8928f933942d86",
+   "sha256": "cdf4f8ddd01bfe0a3d6dab462dc0ff2734551cc7e89a2b18466ec83e29af1661",
+   "sha256_by_lang": {
+    "pt": "cdf4f8ddd01bfe0a3d6dab462dc0ff2734551cc7e89a2b18466ec83e29af1661",
+    "en": "60041be3d3952f420e5ff7b8488e05074bc5f3829f53ad71042526300eb4908d"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0215_dry_warm_deficit.technical.pt.md",
@@ -565,6 +705,10 @@
   },
   {
    "file": "maize_safrinha_0310_baseline_rainfed.json",
+   "files": {
+    "pt": "maize_safrinha_0310_baseline_rainfed.json",
+    "en": "maize_safrinha_0310_baseline_rainfed.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "03-10",
    "soil": "loam",
@@ -575,8 +719,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 4016.9,
-   "bytes": 141106,
-   "sha256": "10a2ca139adafb8f7478cef8232fa219256c220c457b90944de3ed6d9721a9df",
+   "sha256": "14767b37457585fa6214d4a9bee2e8dca3799ce15acffc95a9c9f6bb263711e2",
+   "sha256_by_lang": {
+    "pt": "14767b37457585fa6214d4a9bee2e8dca3799ce15acffc95a9c9f6bb263711e2",
+    "en": "14242c6089c0dddb60022a5b7002d2e5560c61e3332f603515d194d463e7bacc"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0310_baseline_rainfed.technical.pt.md",
@@ -590,6 +737,10 @@
   },
   {
    "file": "maize_safrinha_0310_baseline_deficit.json",
+   "files": {
+    "pt": "maize_safrinha_0310_baseline_deficit.json",
+    "en": "maize_safrinha_0310_baseline_deficit.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "03-10",
    "soil": "loam",
@@ -600,8 +751,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 5989.3,
-   "bytes": 140637,
-   "sha256": "26022326ed859a3ae36f1363c4324aa2f83fd1466b85cb96f740bdf33c3bd777",
+   "sha256": "51120683cfae0746284494785939212492f3b898bc559e5a5bc6793e999ac9ee",
+   "sha256_by_lang": {
+    "pt": "51120683cfae0746284494785939212492f3b898bc559e5a5bc6793e999ac9ee",
+    "en": "41db7b6fa6f49aa4e8667fa1636666d23ca05434f6f203d263bf3ed962068802"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0310_baseline_deficit.technical.pt.md",
@@ -615,6 +769,10 @@
   },
   {
    "file": "maize_safrinha_0310_dry_warm_rainfed.json",
+   "files": {
+    "pt": "maize_safrinha_0310_dry_warm_rainfed.json",
+    "en": "maize_safrinha_0310_dry_warm_rainfed.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "03-10",
    "soil": "loam",
@@ -625,8 +783,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 3596.9,
-   "bytes": 142047,
-   "sha256": "8a768ad375469b4223be3e58cd072aa3d8387f45401a5fa525ba94506b84a162",
+   "sha256": "a2307fba094ba8bcfc7f39613a62bf16ba7892dfe0171922309129539a75f68e",
+   "sha256_by_lang": {
+    "pt": "a2307fba094ba8bcfc7f39613a62bf16ba7892dfe0171922309129539a75f68e",
+    "en": "65c97b9624fbcef56ca87c4bfcbc14b678c5ef3a80a6e545d7da4218c8e1734d"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0310_dry_warm_rainfed.technical.pt.md",
@@ -640,6 +801,10 @@
   },
   {
    "file": "maize_safrinha_0310_dry_warm_deficit.json",
+   "files": {
+    "pt": "maize_safrinha_0310_dry_warm_deficit.json",
+    "en": "maize_safrinha_0310_dry_warm_deficit.en.json"
+   },
    "crop": "maize_safrinha",
    "sowing_date": "03-10",
    "soil": "loam",
@@ -650,8 +815,11 @@
    "status": "ok",
    "n_seasons": 24,
    "yield_p50_kg_ha": 5991.6,
-   "bytes": 141655,
-   "sha256": "3584aae6c1fad3ef752caa1418ac9003933b198982d99c08dff423d0e241d469",
+   "sha256": "b5c98e5f92e7b3750ace3bf5180547c46f145cfb77c860265beba218e5a973ee",
+   "sha256_by_lang": {
+    "pt": "b5c98e5f92e7b3750ace3bf5180547c46f145cfb77c860265beba218e5a973ee",
+    "en": "6a0bfe2d5142c59eb2d2506d4473c01471e6ca8820bf9c71be7ecf98ca96d6a2"
+   },
    "reports": {
     "technical": {
      "pt": "maize_safrinha_0310_dry_warm_deficit.technical.pt.md",

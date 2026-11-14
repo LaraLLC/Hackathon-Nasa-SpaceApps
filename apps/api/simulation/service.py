@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 from .crops import get_crop
 from .economics import EconomicInputs
 from .engine import ManagementOptions
-from .impact import INDICATOR_METHODS
+from . import i18n as tr
 from .scenarios import ScenarioSpec, compare, run_ensemble, run_rotation
 from .schemas import RotationRequest, SimulationRequest
 from .soil import get_soil
@@ -77,7 +77,8 @@ def _data_access(series: WeatherSeries) -> dict:
     }
 
 
-def _common(series: WeatherSeries, area_id, status: str, warnings: list[str], scenario_type: str) -> dict:
+def _common(series: WeatherSeries, area_id, status: str, warnings: list[str], scenario_type: str,
+            lang: tr.Lang = "pt") -> dict:
     return {
         "status": status,
         "area_id": area_id,
@@ -85,11 +86,12 @@ def _common(series: WeatherSeries, area_id, status: str, warnings: list[str], sc
                           "weather_resolution": "NASA POWER ~0.5° x 0.625° (MERRA-2)"
                           if series.source == "nasa_power" else series.source},
         "data_version": f"{series.source}:{series.first_day.isoformat()}..{series.last_day.isoformat()}",
-        "source_refs": series.source_refs + ["FAO-56 (Allen et al., 1998)", "FAO-33 (Doorenbos & Kassam, 1979)"],
+        "source_refs": tr.source_refs(series.source_refs, lang) + ["FAO-56 (Allen et al., 1998)", "FAO-33 (Doorenbos & Kassam, 1979)"],
         "observed_through": series.last_day.isoformat(),
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "model_version": MODEL_VERSION,
-        "engine": ENGINE_DESCRIPTION,
+        "engine": tr.engine_description(lang, ENGINE_DESCRIPTION),
+        "lang": lang,
         "scenario_type": scenario_type,
         "warnings": warnings,
         "data_access": _data_access(series),
@@ -104,16 +106,16 @@ def simulate(req: SimulationRequest, series: WeatherSeries | None = None) -> dic
     mgmt = _mgmt(req.management)
     econ = _econ(req.economics)
 
-    warnings = list(COMMON_WARNINGS)
+    lang = req.lang
+    warnings = tr.common_warnings(lang, COMMON_WARNINGS)
     if crop.status == "conceptual":
-        warnings.insert(0, "CENÁRIO CONCEITUAL: esta cultura não tem modelo validado no Gaiapus.")
+        warnings.insert(0, tr.warning("conceptual", lang))
     if req.reference_yield_kg_ha is None:
-        warnings.append(f"Rendimento de referência padrão ({crop.reference_yield_kg_ha:.0f} kg/ha) é placeholder; "
-                        "calibre com IBGE/PAM do município.")
+        warnings.append(tr.warning("ref_yield", lang, y=crop.reference_yield_kg_ha))
     if series.source != "nasa_power":
-        warnings.insert(0, "DADOS SINTÉTICOS DE TESTE — não usar em apresentação.")
+        warnings.insert(0, tr.warning("synthetic", lang))
     if econ is None:
-        warnings.append("Sem preço/custo informados: resultados econômicos omitidos.")
+        warnings.append(tr.warning("no_economics", lang))
 
     scen = ScenarioSpec(req.climate.label or ("baseline" if req.climate.precip_delta_pct == 0 and
                                               req.climate.temp_delta_c == 0 else "climate_delta"),
@@ -122,27 +124,25 @@ def simulate(req: SimulationRequest, series: WeatherSeries | None = None) -> dic
                         req.reference_yield_kg_ha, scen, econ)
     if not main.years:
         out = _common(series, req.location.area_id, "no_data",
-                      warnings + ["Nenhuma safra completa no período com dados disponíveis."], scen.label)
+                      warnings + [tr.warning("no_data", lang)], scen.label, lang)
         out["skipped_years"] = main.skipped_years
         return out
 
     filled = sum(y["totals"]["filled_weather_days"] for y in main.years)
     if filled:
-        warnings.append(f"{filled} dias com variáveis meteorológicas preenchidas por interpolação.")
+        warnings.append(tr.warning("filled", lang, n=filled))
 
-    out = _common(series, req.location.area_id, "ok", warnings, scen.label)
+    out = _common(series, req.location.area_id, "ok", warnings, scen.label, lang)
     out.update({
         "request": req.model_dump(),
         "crop": {"key": crop.key, "name_pt": crop.name_pt, "name_en": crop.name_en, "status": crop.status,
                  "cycle_days": crop.cycle_days, "stage_days": crop.stage_days,
                  # Ym efetivamente usado (pedido ou padrão da cultura) — campo aditivo
                  "reference_yield_kg_ha": req.reference_yield_kg_ha or crop.reference_yield_kg_ha},
-        "soil": asdict(soil) | {"available_water_mm_per_m": soil.available_water_mm_per_m},
-        "assumptions": list(crop.assumptions) + [
-            f"Solo '{soil.name_pt}': CC {soil.theta_fc}, PMP {soil.theta_wp} m³/m³, CN {soil.curve_number} (FAO-56 tab. 19, valores centrais).",
-            "Raiz cresce linearmente até o início da fase intermediária; solo novo explorado em capacidade de campo.",
-        ],
-        "indicator_methods": INDICATOR_METHODS,
+        "soil": asdict(soil) | {"available_water_mm_per_m": soil.available_water_mm_per_m,
+                                "name_en": tr.soil_name(soil, "en")},
+        "assumptions": tr.crop_assumptions(crop, soil, lang),
+        "indicator_methods": tr.indicator_methods(lang),
         "scenario": asdict(main.scenario),
         "summary": main.summary,
         "seasons": main.years,
@@ -177,8 +177,7 @@ def simulate_rotation(req: RotationRequest, series: WeatherSeries | None = None)
         plan.append((get_crop(it.crop), m, d, it.reference_yield_kg_ha, _econ(it.economics)))
     scen = ScenarioSpec(req.climate.label or "rotation", req.climate.precip_delta_pct, req.climate.temp_delta_c)
     res = run_rotation(series, plan, soil, req.first_year, req.last_year, _mgmt(req.management), scen)
-    warnings = list(COMMON_WARNINGS) + [
-        "Dias de solo exposto são proxy (cobertura do dossel < 30%); palhada/cobertura morta não é modelada."]
-    out = _common(series, req.location.area_id, "ok" if res["seasons"] else "no_data", warnings, "rotation")
+    warnings = tr.common_warnings(req.lang, COMMON_WARNINGS) + [tr.warning("rotation_cover", req.lang)]
+    out = _common(series, req.location.area_id, "ok" if res["seasons"] else "no_data", warnings, "rotation", req.lang)
     out.update({"plan": [it.model_dump() for it in req.plan], **res})
     return out

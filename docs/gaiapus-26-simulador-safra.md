@@ -58,9 +58,11 @@ Pragas, doenças, nutrição, geada, encharcamento, efeito direto de calor no re
                 "price_source": "CEPEA <data>", "cost_source": "CONAB <safra>"},
   "compare_with_baseline": true,
   "compare_irrigation": true,
-  "include_daily": true
+  "include_daily": true,
+  "lang": "pt"
 }
 ```
+`lang` (`"pt"` padrão | `"en"`) escolhe o idioma dos textos do motor (avisos, premissas, métodos dos indicadores, descrição do motor, nome do solo em `soil.name_en`). Não altera nenhum cálculo (teste `test_lang_changes_only_text`); a resposta ecoa `lang`.
 (preço e custo são exemplos zerados: a equipe informa valores reais e cita a fonte.)
 
 Resposta: os campos comuns do contrato (`status`, `area_id`, `spatial_scope`, `data_version`, `source_refs`, `observed_through`, `generated_at`, `model_version`, `scenario_type`, `warnings`, `data_access`) + `crop`, `soil`, `assumptions`, `indicator_methods`, `summary`, `seasons[]`, `representative_seasons.{typical,dry}.daily[]` e `comparisons`.

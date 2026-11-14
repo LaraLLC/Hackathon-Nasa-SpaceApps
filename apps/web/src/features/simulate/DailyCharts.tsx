@@ -7,23 +7,24 @@ import {
   Bar, CartesianGrid, ComposedChart, Line, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 import type { SimulationResponse } from "../../api/simulation.types";
+import { useI18n } from "../../i18n/context";
 import { dayBR, num } from "../../lib/format";
 import { useReducedMotion } from "../../lib/useReducedMotion";
 import { phaseSpans, seasonLabel, toRows, type DailyRow, type PhaseSpan, type RepKey } from "./daily";
-import { PHASE_LABELS } from "./labels";
 
 const Y_AXIS_W = 44;
 const MARGIN = { top: 8, right: 12, bottom: 0, left: 0 };
 
 export function RepToggle({ response, rep, onChange }: { response: SimulationResponse; rep: RepKey; onChange: (r: RepKey) => void }) {
+  const { t } = useI18n();
   const rs = response.representative_seasons;
   if (!rs) return null;
   return (
-    <div className="segmented" role="radiogroup" aria-label="Ano representativo">
+    <div className="segmented" role="radiogroup" aria-label={t.chart.rep_aria}>
       {(["typical", "dry"] as const).map((k) => (
         <button key={k} type="button" role="radio" aria-checked={rep === k}
                 className={`segmented__btn${rep === k ? " is-active" : ""}`} onClick={() => onChange(k)}>
-          {k === "typical" ? "Ano típico" : "Ano seco"} <span className="muted">({seasonLabel(rs[k].daily)})</span>
+          {k === "typical" ? t.chart.typical : t.chart.dry} <span className="muted">({seasonLabel(rs[k].daily)})</span>
         </button>
       ))}
     </div>
@@ -31,33 +32,36 @@ export function RepToggle({ response, rep, onChange }: { response: SimulationRes
 }
 
 function DailyTooltip({ active, das, byDas }: { active?: boolean; das: unknown; byDas: Map<number, DailyRow> }) {
+  const { t } = useI18n();
+  const C = t.chart;
   const r = active ? byDas.get(Number(das)) : undefined;
   if (!r) return null;
   return (
     <div className="chart-tooltip">
-      <p className="chart-tooltip__head">{dayBR(r.day)} · DAS {r.das} · {PHASE_LABELS[r.ky_phase]}</p>
+      <p className="chart-tooltip__head">{dayBR(r.day)} · DAS {r.das} · {t.phases[r.ky_phase]}</p>
       <dl>
-        <dt><i className="sw sw--water" />Água no solo</dt><dd>{num(r.soil_water_fraction * 100)}% da CAD</dd>
-        <dt><i className="sw sw--ks" />Ks</dt><dd>{num(r.ks, 2)} · {r.stress_level === "none" ? "sem estresse" : r.stress_level === "moderate" ? "moderado" : "severo"}</dd>
-        <dt><i className="sw sw--rain" />Chuva</dt><dd>{num(r.precip_mm, 1)} mm</dd>
-        <dt><i className="sw sw--irr" />Irrigação</dt><dd>{num(r.irrigation_mm, 1)} mm</dd>
-        {r.runoff_mm > 0 && <><dt>Enxurrada</dt><dd>{num(r.runoff_mm, 1)} mm</dd></>}
-        {r.deep_percolation_mm > 0 && <><dt>Drenagem</dt><dd>{num(r.deep_percolation_mm, 1)} mm</dd></>}
-        {r.heat_stress && <><dt>Calor</dt><dd>Tmax {num(r.tmax_c, 1)} °C na floração</dd></>}
-        {r.weather_filled && <><dt>Clima</dt><dd>interpolado</dd></>}
+        <dt><i className="sw sw--water" />{C.tt_water}</dt><dd>{num(r.soil_water_fraction * 100)}{C.tt_water_unit}</dd>
+        <dt><i className="sw sw--ks" />Ks</dt><dd>{num(r.ks, 2)} · {C.stress[r.stress_level]}</dd>
+        <dt><i className="sw sw--rain" />{C.tt_rain}</dt><dd>{num(r.precip_mm, 1)} mm</dd>
+        <dt><i className="sw sw--irr" />{C.tt_irr}</dt><dd>{num(r.irrigation_mm, 1)} mm</dd>
+        {r.runoff_mm > 0 && <><dt>{C.tt_runoff}</dt><dd>{num(r.runoff_mm, 1)} mm</dd></>}
+        {r.deep_percolation_mm > 0 && <><dt>{C.tt_drain}</dt><dd>{num(r.deep_percolation_mm, 1)} mm</dd></>}
+        {r.heat_stress && <><dt>{C.tt_heat}</dt><dd>{C.tt_heat_val(num(r.tmax_c, 1))}</dd></>}
+        {r.weather_filled && <><dt>{C.tt_weather}</dt><dd>{C.tt_interp}</dd></>}
       </dl>
     </div>
   );
 }
 
 function PhaseStrip({ spans, first, last }: { spans: PhaseSpan[]; first: number; last: number }) {
+  const { t } = useI18n();
   const total = last - first + 1;
   return (
     <div className="phase-strip" style={{ marginLeft: Y_AXIS_W + MARGIN.left, marginRight: MARGIN.right }} aria-hidden="true">
       {spans.map((s, i) => (
         <div key={`${s.phase}-${s.start}`} className={`phase-strip__seg${i % 2 ? " alt" : ""}`}
-             style={{ flexBasis: `${((s.end - s.start + 1) / total) * 100}%` }} title={`${PHASE_LABELS[s.phase]}: DAS ${s.start}–${s.end}`}>
-          <span>{PHASE_LABELS[s.phase]}</span>
+             style={{ flexBasis: `${((s.end - s.start + 1) / total) * 100}%` }} title={`${t.phases[s.phase]}: DAS ${s.start}–${s.end}`}>
+          <span>{t.phases[s.phase]}</span>
         </div>
       ))}
     </div>
@@ -72,12 +76,14 @@ interface Props {
 }
 
 export function DailyCharts({ response, rep, das, onDasChange }: Props) {
+  const { t } = useI18n();
+  const C = t.chart;
   const reduced = useReducedMotion();
   const season = response.representative_seasons?.[rep];
   const rows = useMemo(() => toRows(season?.daily ?? []), [season]);
   const byDas = useMemo(() => new Map(rows.map((r) => [r.das, r])), [rows]);
   const spans = useMemo(() => phaseSpans(rows), [rows]);
-  if (!season || !rows.length) return <p className="muted">Sem estados diários nesta resposta (include_daily=false).</p>;
+  if (!season || !rows.length) return <p className="muted">{C.no_daily}</p>;
 
   const first = rows[0].das;
   const last = rows[rows.length - 1].das;
@@ -106,76 +112,70 @@ export function DailyCharts({ response, rep, das, onDasChange }: Props) {
 
   return (
     <div className="daily-charts">
-      <p className="hint">
-        Safra {seasonLabel(season.daily)} ({rep === "typical" ? "rendimento mais próximo do P50" : "rendimento mais próximo do P10"}).
-        Clique no gráfico para levar o 3D a esse dia. Eixo X: dias após a semeadura (DAS).
-      </p>
+      <p className="hint">{C.hint(seasonLabel(season.daily), rep === "typical")}</p>
 
       <div className="chart-block">
-        <div className="legend" aria-label="Legenda: água no solo e Ks">
-          <span><i className="sw sw--water" />Fração de água no solo (1 = capacidade de campo, 0 = murcha)</span>
-          <span><i className="sw sw--ks" />Ks (1 = sem estresse)</span>
-          <span><i className="sw sw--threshold" />Limiar de estresse (1 − RAW/TAW)</span>
+        <div className="legend" aria-label={C.lg_aria_a}>
+          <span><i className="sw sw--water" />{C.lg_water}</span>
+          <span><i className="sw sw--ks" />{C.lg_ks}</span>
+          <span><i className="sw sw--threshold" />{C.lg_threshold}</span>
         </div>
         <PhaseStrip spans={spans} first={first} last={last} />
         <div className="chart-click" onClick={click}>
-        <ResponsiveContainer width="100%" height={230}>
-          <ComposedChart data={rows} syncId="daily" margin={MARGIN}>
-            {bands}
-            <CartesianGrid vertical={false} stroke="var(--grid)" />
-            {xAxis}
-            <YAxis width={Y_AXIS_W} domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} tick={{ fontSize: 12 }}
-                   tickFormatter={(v: number) => num(v, 2)} stroke="var(--axis)" tickLine={false} />
-            {tooltip}
-            <Line dataKey="stress_threshold" name="Limiar" stroke="var(--text-muted)" strokeWidth={1.5}
-                  strokeDasharray="4 3" dot={false} activeDot={false} isAnimationActive={!reduced} />
-            <Line dataKey="soil_water_fraction" name="Água no solo" stroke="var(--series-water)" strokeWidth={2}
-                  dot={false} activeDot={{ r: 4, stroke: "var(--surface)", strokeWidth: 2 }} isAnimationActive={!reduced} />
-            <Line dataKey="ks" name="Ks" stroke="var(--series-ks)" strokeWidth={2} type="stepAfter"
-                  dot={false} activeDot={{ r: 4, stroke: "var(--surface)", strokeWidth: 2 }} isAnimationActive={!reduced} />
-            {cursor}
-          </ComposedChart>
-        </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={230}>
+            <ComposedChart data={rows} syncId="daily" margin={MARGIN}>
+              {bands}
+              <CartesianGrid vertical={false} stroke="var(--grid)" />
+              {xAxis}
+              <YAxis width={Y_AXIS_W} domain={[0, 1]} ticks={[0, 0.25, 0.5, 0.75, 1]} tick={{ fontSize: 12 }}
+                     tickFormatter={(v: number) => num(v, 2)} stroke="var(--axis)" tickLine={false} />
+              {tooltip}
+              <Line dataKey="stress_threshold" name={C.lg_threshold} stroke="var(--text-muted)" strokeWidth={1.5}
+                    strokeDasharray="4 3" dot={false} activeDot={false} isAnimationActive={!reduced} />
+              <Line dataKey="soil_water_fraction" name={C.tt_water} stroke="var(--series-water)" strokeWidth={2}
+                    dot={false} activeDot={{ r: 4, stroke: "var(--surface)", strokeWidth: 2 }} isAnimationActive={!reduced} />
+              <Line dataKey="ks" name="Ks" stroke="var(--series-ks)" strokeWidth={2} type="stepAfter"
+                    dot={false} activeDot={{ r: 4, stroke: "var(--surface)", strokeWidth: 2 }} isAnimationActive={!reduced} />
+              {cursor}
+            </ComposedChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
       <div className="chart-block">
-        <div className="legend" aria-label="Legenda: entradas de água">
-          <span><i className="sw sw--rain" />Chuva (mm/dia)</span>
-          <span><i className="sw sw--irr" />Irrigação líquida (mm/dia){hasIrrigation ? "" : " — nenhuma neste ano"}</span>
+        <div className="legend" aria-label={C.lg_aria_b}>
+          <span><i className="sw sw--rain" />{C.lg_rain}</span>
+          <span><i className="sw sw--irr" />{C.lg_irr}{hasIrrigation ? "" : C.lg_irr_none}</span>
         </div>
         <div className="chart-click" onClick={click}>
-        <ResponsiveContainer width="100%" height={150}>
-          <ComposedChart data={rows} syncId="daily" margin={MARGIN} barCategoryGap={1}>
-            {bands}
-            <CartesianGrid vertical={false} stroke="var(--grid)" />
-            {xAxis}
-            <YAxis width={Y_AXIS_W} tick={{ fontSize: 12 }} stroke="var(--axis)" tickLine={false}
-                   tickFormatter={(v: number) => num(v)} unit="" />
-            {tooltip}
-            <Bar dataKey="precip_mm" name="Chuva" stackId="w" fill="var(--series-rain)" isAnimationActive={!reduced} />
-            <Bar dataKey="irrigation_mm" name="Irrigação" stackId="w" fill="var(--series-irr)" radius={[2, 2, 0, 0]}
-                 isAnimationActive={!reduced} />
-            {cursor}
-          </ComposedChart>
-        </ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={150}>
+            <ComposedChart data={rows} syncId="daily" margin={MARGIN} barCategoryGap={1}>
+              {bands}
+              <CartesianGrid vertical={false} stroke="var(--grid)" />
+              {xAxis}
+              <YAxis width={Y_AXIS_W} tick={{ fontSize: 12 }} stroke="var(--axis)" tickLine={false}
+                     tickFormatter={(v: number) => num(v)} />
+              {tooltip}
+              <Bar dataKey="precip_mm" name={C.tt_rain} stackId="w" fill="var(--series-rain)" isAnimationActive={!reduced} />
+              <Bar dataKey="irrigation_mm" name={C.tt_irr} stackId="w" fill="var(--series-irr)" radius={[2, 2, 0, 0]}
+                   isAnimationActive={!reduced} />
+              {cursor}
+            </ComposedChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
       <details className="table-view">
-        <summary>Ver tabela diária ({rows.length} dias)</summary>
+        <summary>{C.table(rows.length)}</summary>
         <div className="table-scroll">
           <table>
-            <thead>
-              <tr><th>DAS</th><th>Data</th><th>Fase</th><th>Água no solo</th><th>Ks</th><th>Estresse</th>
-                <th>Chuva (mm)</th><th>Irrigação (mm)</th><th>Enxurrada (mm)</th><th>Drenagem (mm)</th></tr>
-            </thead>
+            <thead><tr>{C.th.map((h) => <th key={h}>{h}</th>)}</tr></thead>
             <tbody>
               {rows.map((r) => (
                 <tr key={r.das} className={r.das === das ? "is-selected" : undefined}>
-                  <td>{r.das}</td><td>{dayBR(r.day)}</td><td>{PHASE_LABELS[r.ky_phase]}</td>
+                  <td>{r.das}</td><td>{dayBR(r.day)}</td><td>{t.phases[r.ky_phase]}</td>
                   <td>{num(r.soil_water_fraction, 2)}</td><td>{num(r.ks, 2)}</td>
-                  <td>{r.stress_level === "none" ? "—" : r.stress_level === "moderate" ? "moderado" : "severo"}</td>
+                  <td>{r.stress_level === "none" ? "—" : C.stress[r.stress_level]}</td>
                   <td>{num(r.precip_mm, 1)}</td><td>{num(r.irrigation_mm, 1)}</td>
                   <td>{num(r.runoff_mm, 1)}</td><td>{num(r.deep_percolation_mm, 1)}</td>
                 </tr>

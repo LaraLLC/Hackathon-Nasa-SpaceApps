@@ -173,19 +173,22 @@ function DepthRuler() {
 // e gera erros de desmontagem no StrictMode do React 19). Posição = projeção do ponto 3D a cada quadro renderizado.
 interface Label { id: string; pos: [number, number, number]; text: ReactNode; cls: string }
 
-function sceneLabels(day: DailyState): Label[] {
+/** Textos da cena (vêm do i18n via props: este módulo é um chunk lazy separado). */
+export interface SceneText { model: string; root: string; heat: string; led: string }
+
+function sceneLabels(day: DailyState, tx: SceneText): Label[] {
   const pct = Math.round(day.soil_water_fraction * 100);
   return [
     ...RULER_TICKS.filter((d) => d > 0).map((d) => ({ id: `r${d}`, pos: [RULER_X, -d, FRONT_Z + 0.01] as [number, number, number],
                                  text: `${Math.round(d * 100)} cm`, cls: "twin-label--ruler" })),
     // Rótulos da estaca à ESQUERDA dela (a estaca fica na borda direita; à direita seriam cortados no celular).
     ...PROBE_DEPTHS_M.map((d) => ({ id: `p${d}`, pos: [PROBE_X - 0.05, -d, PROBE_Z] as [number, number, number],
-                                    text: <>{Math.round(d * 100)} cm · {pct}% <em>(modelo)</em></>, cls: "twin-label--probe" })),
-    { id: "led", pos: [PROBE_X - 0.08, 0.33, PROBE_Z], text: <>LED <em>(modelo)</em></>, cls: "twin-label--probe" },
-    { id: "root", pos: [-1.2, -day.root_depth_m, FRONT_Z + 0.01], text: `raiz ${Math.round(day.root_depth_m * 100)} cm`,
+                                    text: <>{Math.round(d * 100)} cm · {pct}% <em>{tx.model}</em></>, cls: "twin-label--probe" })),
+    { id: "led", pos: [PROBE_X - 0.08, 0.33, PROBE_Z], text: <>{tx.led} <em>{tx.model}</em></>, cls: "twin-label--probe" },
+    { id: "root", pos: [-1.2, -day.root_depth_m, FRONT_Z + 0.01], text: `${tx.root} ${Math.round(day.root_depth_m * 100)} cm`,
       cls: "twin-label--root" },
     ...(day.heat_stress ? [{ id: "heat", pos: [0, Math.max(0.6, day.plant_height_m + 0.35), 0] as [number, number, number],
-                             text: "☀ calor na floração", cls: "twin-label--heat" }] : []),
+                             text: tx.heat, cls: "twin-label--heat" }] : []),
   ];
 }
 
@@ -343,13 +346,16 @@ function CameraRig({ maxHeight }: { maxHeight: number }) {
   return null;
 }
 
-export interface CropTwin3DProps { crop: CropKey; day: DailyState; maxHeight: number; reducedMotion: boolean; label: string }
+export interface CropTwin3DProps {
+  crop: CropKey; day: DailyState; maxHeight: number; reducedMotion: boolean; label: string; text: SceneText;
+}
 
 // DEV: ?twinbench força renderização contínua para medir FPS (em produção é sempre "demand").
 const BENCH = import.meta.env.DEV && new URLSearchParams(window.location.search).has("twinbench");
 
-export default function CropTwin3D({ crop, day, maxHeight, reducedMotion, label }: CropTwin3DProps) {
-  const labels = useMemo(() => sceneLabels(day), [day]);
+export default function CropTwin3D({ crop, day, maxHeight, reducedMotion, label, text }: CropTwin3DProps) {
+  const { model, root, heat, led } = text;
+  const labels = useMemo(() => sceneLabels(day, { model, root, heat, led }), [day, model, root, heat, led]);
   const refs = useRef(new Map<string, HTMLDivElement>());
   const cam = cameraFor(maxHeight);
   return (

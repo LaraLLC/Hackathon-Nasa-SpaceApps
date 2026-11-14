@@ -136,11 +136,11 @@ async function errorFromResponse(res: Response): Promise<SimulationApiError> {
           const field = i.loc.filter((p) => p !== "body").join(".");
           return field ? `${field}: ${i.msg}` : i.msg;
         }).join("; ")
-      : typeof detail === "string" ? detail : "Entrada inválida";
+      : typeof detail === "string" ? detail : "Invalid input";
     return new SimulationApiError("invalid_input", msg, { status: 422, issues, detail });
   }
   if (res.status === 503) {
-    const msg = typeof detail === "string" ? detail : "NASA POWER indisponível";
+    const msg = typeof detail === "string" ? detail : "NASA POWER unavailable";
     return new SimulationApiError("unavailable", msg, { status: 503, detail });
   }
   return new SimulationApiError("http", `HTTP ${res.status}`, { status: res.status, detail });
@@ -159,10 +159,10 @@ export function createSimulationApi(options: SimulationApiOptions = {}): Simulat
       return res;
     } catch (err) {
       if (err instanceof SimulationApiError) throw err;
-      if (t.timedOut()) throw new SimulationApiError("timeout", "Tempo de resposta esgotado", { cause: err });
+      if (t.timedOut()) throw new SimulationApiError("timeout", "Request timed out", { cause: err });
       // Cancelamento pelo chamador: repassa o AbortError original (a UI normalmente ignora).
       if (opts.signal?.aborted) throw err;
-      throw new SimulationApiError("network", "Falha de rede ao acessar a API Gaiapus", { cause: err });
+      throw new SimulationApiError("network", "Network error reaching the Gaiapus API", { cause: err });
     } finally {
       t.cleanup();
     }
@@ -173,7 +173,7 @@ export function createSimulationApi(options: SimulationApiOptions = {}): Simulat
     try {
       return (await res.json()) as T;
     } catch (err) {
-      throw new SimulationApiError("bad_response", "Resposta da API não é JSON válido", { status: res.status, cause: err });
+      throw new SimulationApiError("bad_response", "API response is not valid JSON", { status: res.status, cause: err });
     }
   }
 

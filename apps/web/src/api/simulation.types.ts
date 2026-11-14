@@ -36,6 +36,8 @@ export interface SimulationRequest {
   compare_with_baseline?: boolean;
   compare_irrigation?: boolean;
   include_daily?: boolean;
+  /** Idioma dos textos do motor (avisos, premissas, métodos). Padrão "pt". Não altera cálculos. */
+  lang?: ReportLang;
 }
 
 export interface Dist { p10: number; p50: number; p90: number; mean: number; min: number; max: number }
@@ -105,6 +107,8 @@ export interface SimulationResponse {
   engine: string;
   scenario_type: string;
   warnings: string[];
+  /** Idioma dos textos desta resposta (aditivo; ausente = "pt"). */
+  lang?: ReportLang;
   /** Proveniência do clima (aditivo). Ausente em respostas antigas. */
   data_access?: DataAccess;
   request?: SimulationRequest; // eco da requisição validada (com defaults aplicados)
@@ -112,7 +116,7 @@ export interface SimulationResponse {
            cycle_days: number; stage_days: number[];
            /** Ym efetivamente usado (aditivo). */
            reference_yield_kg_ha?: number };
-  soil?: { key: SoilKey; name_pt: string; theta_fc: number; theta_wp: number; curve_number: number;
+  soil?: { key: SoilKey; name_pt: string; name_en?: string; theta_fc: number; theta_wp: number; curve_number: number;
            available_water_mm_per_m: number };
   scenario?: { label: string; precip_delta_pct: number; temp_delta_c: number };
   assumptions?: string[];
@@ -157,6 +161,7 @@ export interface RotationRequest {
   soil?: SoilKey;
   management?: SimulationRequest["management"];
   climate?: SimulationRequest["climate"];
+  lang?: ReportLang;
 }
 
 export interface RotationCrop {

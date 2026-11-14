@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { SimulationApiError } from "../../api/simulationApi";
+import { SimulationApiError, type ValidationIssue } from "../../api/simulationApi";
 import type { SimulationRequest } from "../../api/simulation.types";
-import { ScenarioNotPrecomputedError, type DataSource, type SimulationResult } from "../../data/dataSource";
+import { ScenarioNotPrecomputedError, type DataSource, type MismatchReason, type SimulationResult } from "../../data/dataSource";
+import type { Dict } from "../../i18n/dict";
 import { fieldFromLoc, type FieldKey } from "./formState";
 
-/** Estados obrigatórios (skill frontend-crop-digital-twin): loading, ready, no coverage, incomplete, erro, inválido. */
+/** Estados obrigatórios (skill frontend-crop-digital-twin): loading, ready, no coverage, incomplete, erro, inválido.
+ *  Guarda dados crus (issues, reasons); o texto é traduzido na hora de exibir. */
 export type SimError =
-  | { kind: "invalid_input"; fields: Partial<Record<FieldKey, string>>; general: string[] }
+  | { kind: "invalid_input"; fields: Partial<Record<FieldKey, ValidationIssue[]>>; general: (ValidationIssue | string)[] }
   | { kind: "unavailable"; message: string }
   | { kind: "unreachable"; message: string; timeout: boolean }
-  | { kind: "not_precomputed"; reasons: string[] }
+  | { kind: "not_precomputed"; reasons: MismatchReason[] }
   | { kind: "other"; message: string };
 
 export interface SimState {
@@ -21,19 +23,19 @@ export interface SimState {
   error: SimError | null;
 }
 
-/** Mensagens do Pydantic v2 em pt-BR, pelo `type` (estável); fallback = mensagem original. */
-export function ptMessage(i: { type?: string; msg: string; ctx?: Record<string, unknown> }, field: FieldKey | null): string {
+/** Mensagem do Pydantic v2 no idioma da interface, pelo `type` (estável); fallback = mensagem original. */
+export function issueText(i: ValidationIssue | string, field: FieldKey | null, t: Dict): string {
+  if (typeof i === "string") return i;
   const c = i.ctx ?? {};
+  const v = t.validation;
   switch (i.type) {
-    case "missing": return "Campo obrigatório.";
-    case "string_pattern_mismatch":
-      return field === "sowing_date" ? "Use o formato MM-DD (ex.: 10-20 para 20 de outubro)." : "Formato inválido.";
-    case "float_type": case "float_parsing": case "int_type": case "int_parsing":
-      return "Informe um número (ex.: 120 ou 120,50).";
-    case "greater_than": return `Deve ser maior que ${String(c.gt)}.`;
-    case "greater_than_equal": return `Deve ser maior ou igual a ${String(c.ge)}.`;
-    case "less_than_equal": return `Deve ser menor ou igual a ${String(c.le)}.`;
-    case "literal_error": return "Opção não disponível.";
+    case "missing": return v.missing;
+    case "string_pattern_mismatch": return field === "sowing_date" ? v.sowing : v.pattern;
+    case "float_type": case "float_parsing": case "int_type": case "int_parsing": return v.number;
+    case "greater_than": return v.gt(String(c.gt));
+    case "greater_than_equal": return v.ge(String(c.ge));
+    case "less_than_equal": return v.le(String(c.le));
+    case "literal_error": return v.literal;
     default: return i.msg.replace(/^Value error, /, "");
   }
 }
@@ -43,13 +45,12 @@ export function toSimError(e: unknown): SimError {
   if (e instanceof SimulationApiError) {
     switch (e.kind) {
       case "invalid_input": {
-        const fields: Partial<Record<FieldKey, string>> = {};
-        const general: string[] = [];
+        const fields: Partial<Record<FieldKey, ValidationIssue[]>> = {};
+        const general: (ValidationIssue | string)[] = [];
         for (const i of e.issues) {
           const f = fieldFromLoc(i.loc);
-          const msg = ptMessage(i, f);
-          if (f) fields[f] = fields[f] ? `${fields[f]}; ${msg}` : msg;
-          else general.push(msg);
+          if (f) (fields[f] ??= []).push(i);
+          else general.push(i);
         }
         if (!e.issues.length) general.push(e.message);
         return { kind: "invalid_input", fields, general };

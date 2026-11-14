@@ -1,15 +1,15 @@
 # Relatório técnico de simulação
 
 > **Fonte do clima: NASA POWER (dados reais)**  
-> Gerado em: 2026-11-14T18:12:36.999151+00:00 · model_version `gaiapus-sim-0.1.0` · data_version `nasa_power:2001-01-01..2025-12-31`
+> Gerado em: 2026-11-14T18:30:29.708908+00:00 · model_version `gaiapus-sim-0.1.0` · data_version `nasa_power:2001-01-01..2025-12-31`
 
 ## Identificação
 
 - **Cultura:** Soja (experimental)
 - **Semeadura:** 10-20 · Safras simuladas: 24 (2001–2024)
-- **Solo:** Argiloso (ex.: Latossolo) · **Irrigação:** rainfed
+- **Solo:** Argiloso (ex.: Latossolo) · **Irrigação:** sequeiro
 - **Local:** -18.9200, -48.2800 · IBGE 3170206
-- **Cenário:** dry_warm (Δchuva -20.0%, ΔT 1.5 °C)
+- **Cenário:** seco e quente (Δchuva -20.0%, ΔT 1.5 °C)
 - model_version: `gaiapus-sim-0.1.0` · data_version: `nasa_power:2001-01-01..2025-12-31`
 
 ## Métodos
@@ -109,4 +109,4 @@ FAO-56 Penman-Monteith ET0 + balanço hídrico diário (Kc único) + resposta de
 - NASA POWER Daily API (community=AG), https://power.larc.nasa.gov/api/temporal/daily/point
 - FAO-56 (Allen et al., 1998)
 - FAO-33 (Doorenbos & Kassam, 1979)
-- generated_at: 2026-11-14T18:12:36.999151+00:00 · observed_through: 2025-12-31
+- generated_at: 2026-11-14T18:30:29.708908+00:00 · observed_through: 2025-12-31

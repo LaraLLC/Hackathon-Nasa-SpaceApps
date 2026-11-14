@@ -52,6 +52,7 @@ class SimulationRequest(BaseModel):
     compare_with_baseline: bool = True
     compare_irrigation: bool = False
     include_daily: bool = True
+    lang: Literal["pt", "en"] = Field("pt", description="Idioma dos textos (avisos, premissas, métodos). Não altera cálculos.")
 
     @model_validator(mode="after")
     def _check(self):
@@ -80,6 +81,7 @@ class RotationRequest(BaseModel):
     soil: SoilKey = "clay"
     management: Management = Management()
     climate: Climate = Climate()
+    lang: Literal["pt", "en"] = "pt"
 
 
 class ReportRequest(BaseModel):

@@ -10,4 +10,5 @@ O texto vem de `apps/api/simulation/reports.py`, o mesmo usado pela rota `POST /
 | `milho_0310_seco-quente_sequeiro_{technical,commercial}_{pt,en}.pdf` | Milho safrinha, semeadura 10/03, solo médio, sequeiro, Δchuva −20% e ΔT +1,5 °C |
 
 Sem preço/custo: os relatórios não trazem resultado econômico. O rendimento de referência (Ym) é placeholder
-a calibrar com IBGE/PAM. Os textos de premissas, métodos e avisos vêm do motor em português também nos relatórios em inglês.
+a calibrar com IBGE/PAM. Os relatórios `_en` são 100% em inglês (inclusive premissas, métodos e avisos do motor,
+gerados com `lang="en"`); números idênticos aos `_pt`.

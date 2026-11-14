@@ -121,6 +121,21 @@ METRIC_NAMES = {
 }
 
 
+IRRIGATION_NAMES = {
+    "pt": {"rainfed": "sequeiro", "deficit": "irrigação deficitária", "full": "irrigação plena"},
+    "en": {"rainfed": "rainfed", "deficit": "deficit irrigation", "full": "full irrigation"},
+}
+SCENARIO_NAMES = {
+    "pt": {"baseline": "histórico", "dry_warm": "seco e quente", "climate_delta": "Δ personalizado"},
+    "en": {"baseline": "historical", "dry_warm": "dry and warm", "climate_delta": "custom Δ"},
+}
+
+
+def _soil_name(result: dict, lang: str) -> str:
+    soil = result.get("soil") or {}
+    return (soil.get("name_en") if lang == "en" else None) or soil.get("name_pt", "—")
+
+
 def _cname(key: str, lang: str) -> str:
     return COMP_NAMES.get(lang, COMP_NAMES["pt"]).get(key, key)
 
@@ -192,13 +207,15 @@ def build_report(result: dict, kind: Literal["technical", "commercial"], lang: s
     req, crop, s = result["request"], result["crop"], result["summary"]
     crop_name = crop["name_pt"] if lang == "pt" else crop["name_en"]
     header = [
-        f"- **{t['crop']}:** {crop_name} ({crop['status']})",
+        f"- **{t['crop']}:** {crop_name} ({'conceitual' if lang == 'pt' and crop['status'] == 'conceptual' else crop['status']})",
         f"- **{t['sow']}:** {req['sowing_date']} · {t['years']}: {s['n_seasons']} "
         f"({req['first_year']}–{req['last_year']})",
-        f"- **{t['soil']}:** {result['soil']['name_pt']} · **{t['irr']}:** {req['management']['irrigation']}",
+        f"- **{t['soil']}:** {_soil_name(result, lang)} · **{t['irr']}:** "
+        f"{IRRIGATION_NAMES[lang if lang in IRRIGATION_NAMES else 'pt'].get(req['management']['irrigation'], req['management']['irrigation'])}",
         f"- **{t['location']}:** {req['location']['lat']:.4f}, {req['location']['lon']:.4f}"
         + (f" · IBGE {req['location']['area_id']}" if req['location'].get('area_id') else ""),
-        f"- **{t['scenario']}:** {result['scenario']['label']} ({t['drain']} {result['scenario']['precip_delta_pct']}%, "
+        f"- **{t['scenario']}:** {SCENARIO_NAMES[lang if lang in SCENARIO_NAMES else 'pt'].get(result['scenario']['label'], result['scenario']['label'])}"
+        f" ({t['drain']} {result['scenario']['precip_delta_pct']}%, "
         f"ΔT {result['scenario']['temp_delta_c']} °C)",
     ]
     meta = _meta_block(result, t)

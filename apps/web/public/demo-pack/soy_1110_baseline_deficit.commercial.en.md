@@ -1,13 +1,13 @@
 # Business simulation report
 
 > **Weather source: NASA POWER (real data)**  
-> Generated at: 2026-11-14T18:12:38.137826+00:00 · model_version `gaiapus-sim-0.1.0` · data_version `nasa_power:2001-01-01..2025-12-31`
+> Generated at: 2026-11-14T18:30:32.460125+00:00 · model_version `gaiapus-sim-0.1.0` · data_version `nasa_power:2001-01-01..2025-12-31`
 
 - **Crop:** Soybean (experimental)
 - **Sowing:** 11-10 · Simulated seasons: 24 (2001–2024)
-- **Soil:** Argiloso (ex.: Latossolo) · **Irrigation:** deficit
+- **Soil:** Clayey (e.g., Latosol/Oxisol) · **Irrigation:** deficit irrigation
 - **Location:** -18.9200, -48.2800 · IBGE 3170206
-- **Scenario:** baseline (Δrain 0.0%, ΔT 0.0 °C)
+- **Scenario:** historical (Δrain 0.0%, ΔT 0.0 °C)
 
 ## Summary
 
@@ -45,8 +45,8 @@ P10 = bad year (only 1 in 10 historical years was worse); P50 = typical year; P9
 
 ## Limitations and warnings
 
-- Rendimento é estimativa por modelo físico simplificado (só limitação hídrica); não considera pragas, doenças, nutrição, geada, encharcamento nem efeito direto de calor.
-- NASA POWER tem resolução de ~0,5° (dezenas de km): o clima representa a região, não o talhão.
-- Cenários de Δchuva/ΔT são testes de sensibilidade, não projeções climáticas.
-- Rendimento de referência padrão (4000 kg/ha) é placeholder; calibre com IBGE/PAM do município.
-- Sem preço/custo informados: resultados econômicos omitidos.
+- Yield is an estimate from a simplified physical model (water limitation only); it does not account for pests, diseases, nutrition, frost, waterlogging or the direct effect of heat.
+- NASA POWER resolution is ~0.5° (tens of km): weather represents the region, not the field.
+- Δrain/ΔT scenarios are sensitivity tests, not climate projections.
+- Default reference yield (4000 kg/ha) is a placeholder; calibrate with municipal IBGE/PAM data.
+- No price/cost provided: economic results omitted.

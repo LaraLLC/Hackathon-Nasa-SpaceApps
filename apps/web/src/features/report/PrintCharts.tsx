@@ -4,18 +4,15 @@ import { CartesianGrid, ComposedChart, Line, ReferenceArea, XAxis, YAxis } from 
 import type { KyPhase, SimulationResponse } from "../../api/simulation.types";
 import { num } from "../../lib/format";
 import { phaseSpans, seasonLabel, toRows, type RepKey } from "../simulate/daily";
-import { PHASE_LABELS } from "../simulate/labels";
 
-const PHASE_EN: Record<KyPhase, string> = {
-  initial: "Initial", development: "Development", flowering: "Flowering", yield_formation: "Yield formation", late: "Late",
-};
+type PhaseNames = Record<KyPhase, string>;
 
 const W = 680;
 const H = 190;
 const MARGIN = { top: 6, right: 10, bottom: 0, left: 0 };
 const YW = 36;
 
-function Figure({ response, rep, n, lang }: { response: SimulationResponse; rep: RepKey; n: number; lang: "pt" | "en" }) {
+function Figure({ response, rep, n, lang, phases }: { response: SimulationResponse; rep: RepKey; n: number; lang: "pt" | "en"; phases: PhaseNames }) {
   const season = response.representative_seasons?.[rep];
   if (!season?.daily.length) return null;
   const rows = toRows(season.daily);
@@ -32,7 +29,7 @@ function Figure({ response, rep, n, lang }: { response: SimulationResponse; rep:
       <div className="print-phases" style={{ marginLeft: YW + MARGIN.left, marginRight: MARGIN.right, width: W - YW - MARGIN.right }}>
         {spans.map((s) => (
           <span key={`${s.phase}-${s.start}`} style={{ flexBasis: `${((s.end - s.start + 1) / total) * 100}%` }}>
-            {lang === "pt" ? PHASE_LABELS[s.phase] : PHASE_EN[s.phase]}
+            {phases[s.phase]}
           </span>
         ))}
       </div>
@@ -54,7 +51,7 @@ function Figure({ response, rep, n, lang }: { response: SimulationResponse; rep:
   );
 }
 
-export function PrintCharts({ response, lang }: { response: SimulationResponse; lang: "pt" | "en" }) {
+export function PrintCharts({ response, lang, phases }: { response: SimulationResponse; lang: "pt" | "en"; phases: PhaseNames }) {
   if (!response.representative_seasons) return null;
   return (
     <section className="print-figures">
@@ -65,8 +62,8 @@ export function PrintCharts({ response, lang }: { response: SimulationResponse; 
         <span><i className="dash" />{lang === "pt" ? "Limiar de estresse (1 − RAW/TAW)" : "Stress threshold (1 − RAW/TAW)"}</span>
         <span>{lang === "pt" ? "Eixo X: dias após a semeadura" : "X axis: days after sowing"}</span>
       </p>
-      <Figure response={response} rep="typical" n={1} lang={lang} />
-      <Figure response={response} rep="dry" n={2} lang={lang} />
+      <Figure response={response} rep="typical" n={1} lang={lang} phases={phases} />
+      <Figure response={response} rep="dry" n={2} lang={lang} phases={phases} />
     </section>
   );
 }

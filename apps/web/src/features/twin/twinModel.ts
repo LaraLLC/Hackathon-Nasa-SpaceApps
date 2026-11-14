@@ -20,17 +20,10 @@ export const LEAF_COLORS: Record<StressLevel, string> = {
   severe: "#8a5a2b",
 };
 
-export const STRESS_LABELS: Record<StressLevel, string> = {
-  none: "sem estresse",
-  moderate: "estresse moderado",
-  severe: "estresse severo",
-};
-
 /** Downlink da estaca (references/PROJECT_CONTEXT.md): led 0 apagado, 1 verde, 2 amarelo, 3 vermelho. */
 export type LedCode = 0 | 1 | 2 | 3;
 export const LED_FROM_STRESS: Record<StressLevel, LedCode> = { none: 1, moderate: 2, severe: 3 };
 export const LED_COLORS: Record<LedCode, string> = { 0: "#3a3a38", 1: "#22c55e", 2: "#facc15", 3: "#ef4444" };
-export const LED_NAMES: Record<LedCode, string> = { 0: "apagado", 1: "verde", 2: "amarelo", 3: "vermelho" };
 
 /** Profundidades dos eletrodos da estaca (protocolo: raw_15, raw_40). */
 export const PROBE_DEPTHS_M = [0.15, 0.4] as const;

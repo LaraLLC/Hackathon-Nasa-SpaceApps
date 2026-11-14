@@ -1,28 +1,28 @@
 # Technical simulation report
 
 > **Weather source: NASA POWER (real data)**  
-> Generated at: 2026-11-14T18:12:42.277136+00:00 · model_version `gaiapus-sim-0.1.0` · data_version `nasa_power:2001-01-01..2025-12-31`
+> Generated at: 2026-11-14T18:30:40.958136+00:00 · model_version `gaiapus-sim-0.1.0` · data_version `nasa_power:2001-01-01..2025-12-31`
 
 ## Identification
 
 - **Crop:** Second-season maize (experimental)
 - **Sowing:** 02-15 · Simulated seasons: 24 (2001–2024)
-- **Soil:** Médio (franco) · **Irrigation:** deficit
+- **Soil:** Medium (loam) · **Irrigation:** deficit irrigation
 - **Location:** -18.9200, -48.2800 · IBGE 3170206
-- **Scenario:** dry_warm (Δrain -20.0%, ΔT 1.5 °C)
+- **Scenario:** dry and warm (Δrain -20.0%, ΔT 1.5 °C)
 - model_version: `gaiapus-sim-0.1.0` · data_version: `nasa_power:2001-01-01..2025-12-31`
 
 ## Methods
 
-FAO-56 Penman-Monteith ET0 + balanço hídrico diário (Kc único) + resposta de rendimento à água FAO-33 (Ky por fase), ensemble sobre anos NASA POWER
+FAO-56 Penman-Monteith ET0 + daily root-zone water balance (single Kc) + FAO-33 yield response to water (Ky by phase), ensemble over NASA POWER years
 
 ## Assumptions
 
-- Ciclo de 125 dias; ajustar por híbrido e data de semeadura.
-- Rendimento de referência 6000 kg/ha é placeholder; calibrar com IBGE/PAM (2ª safra).
-- Limiar de calor 35 °C no pendoamento é indicador, não entra no cálculo de rendimento.
-- Solo 'Médio (franco)': CC 0.25, PMP 0.12 m³/m³, CN 78 (FAO-56 tab. 19, valores centrais).
-- Raiz cresce linearmente até o início da fase intermediária; solo novo explorado em capacidade de campo.
+- 125-day cycle; adjust per hybrid and sowing date.
+- Reference yield of 6000 kg/ha is a placeholder; calibrate with IBGE/PAM (second season).
+- 35 °C heat threshold at tasseling is an indicator; it does not enter the yield calculation.
+- Soil 'Medium (loam)': FC 0.25, WP 0.12 m³/m³, CN 78 (FAO-56 table 19, central values).
+- Roots grow linearly until the start of the mid-season phase; newly explored soil starts at field capacity.
 - Reference yield: 6000 kg/ha
 
 ## Results (distribution over historical years)
@@ -56,16 +56,16 @@ FAO-56 Penman-Monteith ET0 + balanço hídrico diário (Kc único) + resposta de
 
 | Metric | Method |
 | --- | --- |
-| crop_water_use_m3_ha | ETa acumulada (mm) × 10 — consumo de água pela cultura (FAO-56). |
-| blue_water_m3_ha | Irrigação aplicada (mm, bruta) × 10 — água retirada de rios/poços. |
-| green_water_m3_ha | max(0, ETa − irrigação líquida) × 10 — água da chuva usada pela cultura. |
-| water_productivity_kg_m3 | Rendimento / (ETa × 10). |
-| deep_percolation_mm | Drenagem abaixo da raiz — PROXY de risco de lixiviação de nutrientes. |
-| runoff_mm | Escoamento SCS-CN — PROXY de risco de erosão e perda de solo. |
-| water_stress_days | Dias com Ks < 1 (água abaixo da fração facilmente disponível). |
-| severe_stress_days | Dias com Ks < 0,6. |
-| heat_stress_days_flowering | Dias com Tmax acima do limiar da cultura durante a floração. |
-| soil_cover_days | Dias com cobertura do dossel ≥ 30% — PROXY de proteção do solo. |
+| crop_water_use_m3_ha | Cumulative ETa (mm) × 10 — crop water consumption (FAO-56). |
+| blue_water_m3_ha | Applied irrigation (mm, gross) × 10 — water withdrawn from rivers/wells. |
+| green_water_m3_ha | max(0, ETa − net irrigation) × 10 — rainwater used by the crop. |
+| water_productivity_kg_m3 | Yield / (ETa × 10). |
+| deep_percolation_mm | Drainage below the root zone — PROXY for nutrient-leaching risk. |
+| runoff_mm | SCS-CN runoff — PROXY for erosion and soil-loss risk. |
+| water_stress_days | Days with Ks < 1 (water below the readily available fraction). |
+| severe_stress_days | Days with Ks < 0.6. |
+| heat_stress_days_flowering | Days with Tmax above the crop threshold during flowering. |
+| soil_cover_days | Days with canopy cover ≥ 30% — PROXY for soil protection. |
 
 ## Scenario comparison: Climate scenario vs historical
 
@@ -97,15 +97,15 @@ FAO-56 Penman-Monteith ET0 + balanço hídrico diário (Kc único) + resposta de
 
 ## Limitations and warnings
 
-- Rendimento é estimativa por modelo físico simplificado (só limitação hídrica); não considera pragas, doenças, nutrição, geada, encharcamento nem efeito direto de calor.
-- NASA POWER tem resolução de ~0,5° (dezenas de km): o clima representa a região, não o talhão.
-- Cenários de Δchuva/ΔT são testes de sensibilidade, não projeções climáticas.
-- Rendimento de referência padrão (6000 kg/ha) é placeholder; calibre com IBGE/PAM do município.
-- Sem preço/custo informados: resultados econômicos omitidos.
+- Yield is an estimate from a simplified physical model (water limitation only); it does not account for pests, diseases, nutrition, frost, waterlogging or the direct effect of heat.
+- NASA POWER resolution is ~0.5° (tens of km): weather represents the region, not the field.
+- Δrain/ΔT scenarios are sensitivity tests, not climate projections.
+- Default reference yield (6000 kg/ha) is a placeholder; calibrate with municipal IBGE/PAM data.
+- No price/cost provided: economic results omitted.
 
 ## Provenance
 
 - NASA POWER Daily API (community=AG), https://power.larc.nasa.gov/api/temporal/daily/point
 - FAO-56 (Allen et al., 1998)
 - FAO-33 (Doorenbos & Kassam, 1979)
-- generated_at: 2026-11-14T18:12:42.277136+00:00 · observed_through: 2025-12-31
+- generated_at: 2026-11-14T18:30:40.958136+00:00 · observed_through: 2025-12-31

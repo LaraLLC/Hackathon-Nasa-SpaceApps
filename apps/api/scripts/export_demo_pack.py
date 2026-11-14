@@ -10,7 +10,8 @@ Grade (Uberlândia, IBGE 3170206; -18.92, -48.28; safras 2001–2024):
     × clima {baseline, dry_warm (−20 % chuva, +1,5 °C)} × irrigação {rainfed, deficit}
     compare_with_baseline=true, compare_irrigation=true, include_daily=true, economics=null.
 
-Saída: apps/web/public/demo-pack/<crop>_<MMDD>_<clima>_<irrigacao>.json + index.json, e para cada JSON
+Saída: apps/web/public/demo-pack/<crop>_<MMDD>_<clima>_<irrigacao>.json (textos PT) e .en.json (textos EN;
+números idênticos, verificado na exportação) + index.json, e para cada cenário
 os 4 relatórios <...>.{technical,commercial}.{pt,en}.md gerados por simulation.reports.build_report
 (o mesmo código da rota /report → texto idêntico no modo fixture e no modo API).
 Café fica de fora (status "conceitual": só no modo API).
@@ -90,41 +91,52 @@ def main() -> int:
 
     for crop, spec in CROPS.items():
         for sowing, (clim_key, clim), irrigation in product(spec["sowing"], CLIMATES.items(), IRRIGATION):
-            req = SimulationRequest(
-                location=LOCATION, crop=crop, sowing_date=sowing, first_year=FIRST_YEAR, last_year=LAST_YEAR,
-                soil=spec["soil"], management={"irrigation": irrigation}, climate=clim, economics=None,
-                compare_with_baseline=True, compare_irrigation=True, include_daily=True,
-            )
-            res = simulate(req)
-            if not res.get("data_version", "").startswith("nasa_power:"):
-                print(f"ERRO: {crop} {sowing}: fonte {res.get('data_version')} não é NASA POWER", file=sys.stderr)
-                return 3
-            if data_version and res["data_version"] != data_version:
-                print("ERRO: data_version mudou no meio da exportação", file=sys.stderr)
-                return 3
-            data_version = res["data_version"]
-
             name = file_name(crop, sowing, clim_key, irrigation)
-            raw = json.dumps(res, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
-            (out_dir / name).write_bytes(raw)
-            total += len(raw)
-            # Relatórios pelo MESMO build_report da rota POST /v1/simulations/report → texto idêntico nos dois modos.
-            reports: dict[str, dict[str, str]] = {}
-            for kind, lang in product(REPORT_KINDS, REPORT_LANGS):
-                md_name = name.removesuffix(".json") + f".{kind}.{lang}.md"
-                md = build_report(res, kind, lang=lang).encode("utf-8")
-                (out_dir / md_name).write_bytes(md)
-                total += len(md)
-                reports.setdefault(kind, {})[lang] = md_name
+            files, hashes, reports = {}, {}, {}
+            by_lang: dict[str, dict] = {}
+            for lang in REPORT_LANGS:  # mesma simulação nos dois idiomas: só os textos mudam (lang)
+                req = SimulationRequest(
+                    location=LOCATION, crop=crop, sowing_date=sowing, first_year=FIRST_YEAR, last_year=LAST_YEAR,
+                    soil=spec["soil"], management={"irrigation": irrigation}, climate=clim, economics=None,
+                    compare_with_baseline=True, compare_irrigation=True, include_daily=True, lang=lang,
+                )
+                res = simulate(req)
+                if not res.get("data_version", "").startswith("nasa_power:"):
+                    print(f"ERRO: {crop} {sowing}: fonte {res.get('data_version')} não é NASA POWER", file=sys.stderr)
+                    return 3
+                if data_version and res["data_version"] != data_version:
+                    print("ERRO: data_version mudou no meio da exportação", file=sys.stderr)
+                    return 3
+                data_version = res["data_version"]
+                by_lang[lang] = res
+                fname = name if lang == "pt" else name.removesuffix(".json") + f".{lang}.json"
+                raw = json.dumps(res, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+                (out_dir / fname).write_bytes(raw)
+                total += len(raw)
+                files[lang], hashes[lang] = fname, hashlib.sha256(raw).hexdigest()
+                # Relatórios pelo MESMO build_report da rota /report, a partir do resultado NO MESMO idioma.
+                for kind in REPORT_KINDS:
+                    md_name = name.removesuffix(".json") + f".{kind}.{lang}.md"
+                    md = build_report(res, kind, lang=lang).encode("utf-8")
+                    (out_dir / md_name).write_bytes(md)
+                    total += len(md)
+                    reports.setdefault(kind, {})[lang] = md_name
+            # Prova de que o idioma não muda números: tudo que não é texto tem de ser idêntico.
+            text_fields = {"warnings", "assumptions", "indicator_methods", "engine", "lang", "generated_at", "request"}
+            for k in set(by_lang["pt"]) - text_fields:
+                if by_lang["pt"][k] != by_lang["en"][k]:
+                    print(f"ERRO: {name}: campo '{k}' difere entre pt e en", file=sys.stderr)
+                    return 4
+            res = by_lang["pt"]
             s = res.get("summary", {})
             entries.append({
-                "file": name, "crop": crop, "sowing_date": sowing, "soil": spec["soil"],
+                "file": files["pt"], "files": files, "crop": crop, "sowing_date": sowing, "soil": spec["soil"],
                 "climate": clim_key, "precip_delta_pct": clim["precip_delta_pct"], "temp_delta_c": clim["temp_delta_c"],
                 "irrigation": irrigation, "status": res["status"], "n_seasons": s.get("n_seasons"),
                 "yield_p50_kg_ha": s.get("yield_kg_ha", {}).get("p50"),
-                "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(), "reports": reports,
+                "sha256": hashes["pt"], "sha256_by_lang": hashes, "reports": reports,
             })
-            print(f"{name:45s} {res['status']:7s} n={s.get('n_seasons')}  {len(raw) / 1024:7.1f} KB")
+            print(f"{name:45s} {res['status']:7s} n={s.get('n_seasons')}  pt+en")
 
     index = {
         "kind": "gaiapus-demo-pack",
