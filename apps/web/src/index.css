@@ -1,0 +1,16 @@
+/* Base mínima (Etapa 1). Tokens visuais completos entram na Etapa 2. */
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  --bg: #f7f6f1;
+  --fg: #1d241f;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #141815; --fg: #e6e9e4; }
+}
+body { margin: 0; background: var(--bg); color: var(--fg); }
+.probe { max-width: 720px; margin: 2rem auto; padding: 0 16px; }
+.probe dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.25rem 1rem; }
+.probe dt { font-weight: 600; }
+.probe dd { margin: 0; }

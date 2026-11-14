@@ -1,0 +1,26 @@
+# Dependências e ambientes
+node_modules/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Build
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# Segredos / configuração local (apps/web/.env é o padrão sem segredos e É versionado)
+.env.local
+.env.*.local
+
+# Cache do NASA POWER (regenerável com apps/api/scripts/fetch_power.py)
+apps/api/data/cache/
+
+# Editor / SO
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.log

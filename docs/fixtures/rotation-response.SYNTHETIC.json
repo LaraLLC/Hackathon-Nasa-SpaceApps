@@ -1,0 +1,1320 @@
+{
+ "status": "ok",
+ "area_id": null,
+ "spatial_scope": {
+  "type": "point",
+  "lat": -18.92,
+  "lon": -48.28,
+  "weather_resolution": "synthetic_test"
+ },
+ "data_version": "synthetic_test:2001-01-01..2020-12-31",
+ "source_refs": [
+  "SYNTHETIC — gerado para testes, não representa observação",
+  "FAO-56 (Allen et al., 1998)",
+  "FAO-33 (Doorenbos & Kassam, 1979)"
+ ],
+ "observed_through": "2020-12-31",
+ "generated_at": "2026-11-14T16:07:56.147343+00:00",
+ "model_version": "gaiapus-sim-0.1.0",
+ "engine": "FAO-56 Penman-Monteith ET0 + balanço hídrico diário (Kc único) + resposta de rendimento à água FAO-33 (Ky por fase), ensemble sobre anos NASA POWER",
+ "scenario_type": "rotation",
+ "warnings": [
+  "Rendimento é estimativa por modelo físico simplificado (só limitação hídrica); não considera pragas, doenças, nutrição, geada, encharcamento nem efeito direto de calor.",
+  "NASA POWER tem resolução de ~0,5° (dezenas de km): o clima representa a região, não o talhão.",
+  "Cenários de Δchuva/ΔT são testes de sensibilidade, não projeções climáticas.",
+  "Dias de solo exposto são proxy (cobertura do dossel < 30%); palhada/cobertura morta não é modelada."
+ ],
+ "plan": [
+  {
+   "crop": "soy",
+   "sowing_date": "10-15",
+   "reference_yield_kg_ha": null,
+   "economics": {
+    "price_per_bag": 110.0,
+    "cost_per_ha": 4500.0,
+    "irrigation_cost_per_mm_ha": 0,
+    "area_ha": 1,
+    "price_source": "informado pelo usuário",
+    "cost_source": "informado pelo usuário"
+   }
+  },
+  {
+   "crop": "maize_safrinha",
+   "sowing_date": "02-10",
+   "reference_yield_kg_ha": null,
+   "economics": {
+    "price_per_bag": 55.0,
+    "cost_per_ha": 3800.0,
+    "irrigation_cost_per_mm_ha": 0,
+    "area_ha": 1,
+    "price_source": "informado pelo usuário",
+    "cost_source": "informado pelo usuário"
+   }
+  }
+ ],
+ "seasons": [
+  {
+   "agricultural_year": 2001,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2001-10-15",
+     "harvest_date": "2002-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4111.5,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4111.5,
+      "water_productivity_kg_m3": 0.973,
+      "deep_percolation_mm": 311.57,
+      "runoff_mm": 173.02,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2002-02-10",
+     "harvest_date": "2002-06-14",
+     "yield_kg_ha": 6000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4095.9,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4095.9,
+      "water_productivity_kg_m3": 1.465,
+      "deep_percolation_mm": 258.23,
+      "runoff_mm": 127.96,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 100.0,
+      "revenue_per_ha": 5500.0,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1700.0,
+      "profit_total": 1700.0,
+      "margin_pct": 30.9,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8207.4,
+   "profit_per_ha": 4533.33
+  },
+  {
+   "agricultural_year": 2002,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2002-10-15",
+     "harvest_date": "2003-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4189.8,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4189.8,
+      "water_productivity_kg_m3": 0.955,
+      "deep_percolation_mm": 214.88,
+      "runoff_mm": 58.76,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2003-02-10",
+     "harvest_date": "2003-06-14",
+     "yield_kg_ha": 5937.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4168.8,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4168.8,
+      "water_productivity_kg_m3": 1.424,
+      "deep_percolation_mm": 101.24,
+      "runoff_mm": 50.37,
+      "water_stress_days": 9,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 98.95,
+      "revenue_per_ha": 5442.25,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1642.25,
+      "profit_total": 1642.25,
+      "margin_pct": 30.2,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8358.6,
+   "profit_per_ha": 4475.58
+  },
+  {
+   "agricultural_year": 2003,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2003-10-15",
+     "harvest_date": "2004-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4158.1,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4158.1,
+      "water_productivity_kg_m3": 0.962,
+      "deep_percolation_mm": 306.99,
+      "runoff_mm": 84.97,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2004-02-10",
+     "harvest_date": "2004-06-13",
+     "yield_kg_ha": 4747.3,
+     "indicators": {
+      "crop_water_use_m3_ha": 3261.8,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3261.8,
+      "water_productivity_kg_m3": 1.455,
+      "deep_percolation_mm": 287.68,
+      "runoff_mm": 56.45,
+      "water_stress_days": 42,
+      "severe_stress_days": 34,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 79.12,
+      "revenue_per_ha": 4351.69,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 551.69,
+      "profit_total": 551.69,
+      "margin_pct": 12.7,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 7419.9,
+   "profit_per_ha": 3385.02
+  },
+  {
+   "agricultural_year": 2004,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2004-10-15",
+     "harvest_date": "2005-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4142.0,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4142.0,
+      "water_productivity_kg_m3": 0.966,
+      "deep_percolation_mm": 148.3,
+      "runoff_mm": 53.61,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2005-02-10",
+     "harvest_date": "2005-06-14",
+     "yield_kg_ha": 4735.6,
+     "indicators": {
+      "crop_water_use_m3_ha": 3429.4,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3429.4,
+      "water_productivity_kg_m3": 1.381,
+      "deep_percolation_mm": 116.21,
+      "runoff_mm": 15.06,
+      "water_stress_days": 51,
+      "severe_stress_days": 32,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 78.93,
+      "revenue_per_ha": 4340.97,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 540.97,
+      "profit_total": 540.97,
+      "margin_pct": 12.5,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 7571.4,
+   "profit_per_ha": 3374.3
+  },
+  {
+   "agricultural_year": 2005,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2005-10-15",
+     "harvest_date": "2006-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4175.1,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4175.1,
+      "water_productivity_kg_m3": 0.958,
+      "deep_percolation_mm": 432.55,
+      "runoff_mm": 156.08,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2006-02-10",
+     "harvest_date": "2006-06-14",
+     "yield_kg_ha": 5025.4,
+     "indicators": {
+      "crop_water_use_m3_ha": 3560.8,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3560.8,
+      "water_productivity_kg_m3": 1.411,
+      "deep_percolation_mm": 235.96,
+      "runoff_mm": 59.35,
+      "water_stress_days": 40,
+      "severe_stress_days": 24,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 83.76,
+      "revenue_per_ha": 4606.62,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 806.62,
+      "profit_total": 806.62,
+      "margin_pct": 17.5,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 7735.9,
+   "profit_per_ha": 3639.95
+  },
+  {
+   "agricultural_year": 2006,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2006-10-15",
+     "harvest_date": "2007-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4058.7,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4058.7,
+      "water_productivity_kg_m3": 0.986,
+      "deep_percolation_mm": 269.82,
+      "runoff_mm": 115.01,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2007-02-10",
+     "harvest_date": "2007-06-14",
+     "yield_kg_ha": 5593.3,
+     "indicators": {
+      "crop_water_use_m3_ha": 3858.5,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3858.5,
+      "water_productivity_kg_m3": 1.45,
+      "deep_percolation_mm": 240.7,
+      "runoff_mm": 79.6,
+      "water_stress_days": 36,
+      "severe_stress_days": 2,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 93.22,
+      "revenue_per_ha": 5127.19,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1327.19,
+      "profit_total": 1327.19,
+      "margin_pct": 25.9,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 7917.2,
+   "profit_per_ha": 4160.52
+  },
+  {
+   "agricultural_year": 2007,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2007-10-15",
+     "harvest_date": "2008-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4221.3,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4221.3,
+      "water_productivity_kg_m3": 0.948,
+      "deep_percolation_mm": 209.86,
+      "runoff_mm": 39.13,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2008-02-10",
+     "harvest_date": "2008-06-13",
+     "yield_kg_ha": 5600.6,
+     "indicators": {
+      "crop_water_use_m3_ha": 3914.4,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3914.4,
+      "water_productivity_kg_m3": 1.431,
+      "deep_percolation_mm": 232.71,
+      "runoff_mm": 57.93,
+      "water_stress_days": 39,
+      "severe_stress_days": 2,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 93.34,
+      "revenue_per_ha": 5133.88,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1333.88,
+      "profit_total": 1333.88,
+      "margin_pct": 26.0,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8135.7,
+   "profit_per_ha": 4167.21
+  },
+  {
+   "agricultural_year": 2008,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2008-10-15",
+     "harvest_date": "2009-02-11",
+     "yield_kg_ha": 3995.6,
+     "indicators": {
+      "crop_water_use_m3_ha": 4181.8,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4181.8,
+      "water_productivity_kg_m3": 0.955,
+      "deep_percolation_mm": 115.51,
+      "runoff_mm": 81.76,
+      "water_stress_days": 1,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.59,
+      "revenue_per_ha": 7325.27,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2825.27,
+      "profit_total": 2825.27,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2009-02-10",
+     "harvest_date": "2009-06-14",
+     "yield_kg_ha": 6000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4185.6,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4185.6,
+      "water_productivity_kg_m3": 1.433,
+      "deep_percolation_mm": 148.94,
+      "runoff_mm": 65.41,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 100.0,
+      "revenue_per_ha": 5500.0,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1700.0,
+      "profit_total": 1700.0,
+      "margin_pct": 30.9,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8367.4,
+   "profit_per_ha": 4525.27
+  },
+  {
+   "agricultural_year": 2009,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2009-10-15",
+     "harvest_date": "2010-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4188.8,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4188.8,
+      "water_productivity_kg_m3": 0.955,
+      "deep_percolation_mm": 151.39,
+      "runoff_mm": 99.62,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2010-02-10",
+     "harvest_date": "2010-06-14",
+     "yield_kg_ha": 5463.2,
+     "indicators": {
+      "crop_water_use_m3_ha": 3855.1,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3855.1,
+      "water_productivity_kg_m3": 1.417,
+      "deep_percolation_mm": 342.81,
+      "runoff_mm": 107.41,
+      "water_stress_days": 34,
+      "severe_stress_days": 22,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 91.05,
+      "revenue_per_ha": 5007.93,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1207.93,
+      "profit_total": 1207.93,
+      "margin_pct": 24.1,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8043.9,
+   "profit_per_ha": 4041.26
+  },
+  {
+   "agricultural_year": 2010,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2010-10-15",
+     "harvest_date": "2011-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4207.6,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4207.6,
+      "water_productivity_kg_m3": 0.951,
+      "deep_percolation_mm": 291.42,
+      "runoff_mm": 92.14,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2011-02-10",
+     "harvest_date": "2011-06-14",
+     "yield_kg_ha": 5991.1,
+     "indicators": {
+      "crop_water_use_m3_ha": 4272.4,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4272.4,
+      "water_productivity_kg_m3": 1.402,
+      "deep_percolation_mm": 198.92,
+      "runoff_mm": 132.77,
+      "water_stress_days": 3,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 99.85,
+      "revenue_per_ha": 5491.84,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1691.84,
+      "profit_total": 1691.84,
+      "margin_pct": 30.8,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8480.0,
+   "profit_per_ha": 4525.17
+  },
+  {
+   "agricultural_year": 2011,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2011-10-15",
+     "harvest_date": "2012-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4131.3,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4131.3,
+      "water_productivity_kg_m3": 0.968,
+      "deep_percolation_mm": 300.61,
+      "runoff_mm": 83.06,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2012-02-10",
+     "harvest_date": "2012-06-13",
+     "yield_kg_ha": 5484.7,
+     "indicators": {
+      "crop_water_use_m3_ha": 3809.3,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3809.3,
+      "water_productivity_kg_m3": 1.44,
+      "deep_percolation_mm": 241.86,
+      "runoff_mm": 65.15,
+      "water_stress_days": 32,
+      "severe_stress_days": 20,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 91.41,
+      "revenue_per_ha": 5027.64,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1227.64,
+      "profit_total": 1227.64,
+      "margin_pct": 24.4,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 7940.6,
+   "profit_per_ha": 4060.97
+  },
+  {
+   "agricultural_year": 2012,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2012-10-15",
+     "harvest_date": "2013-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4147.7,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4147.7,
+      "water_productivity_kg_m3": 0.964,
+      "deep_percolation_mm": 255.68,
+      "runoff_mm": 113.63,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2013-02-10",
+     "harvest_date": "2013-06-14",
+     "yield_kg_ha": 5801.4,
+     "indicators": {
+      "crop_water_use_m3_ha": 4050.6,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4050.6,
+      "water_productivity_kg_m3": 1.432,
+      "deep_percolation_mm": 269.67,
+      "runoff_mm": 112.68,
+      "water_stress_days": 22,
+      "severe_stress_days": 8,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 96.69,
+      "revenue_per_ha": 5317.95,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1517.95,
+      "profit_total": 1517.95,
+      "margin_pct": 28.5,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8198.3,
+   "profit_per_ha": 4351.28
+  },
+  {
+   "agricultural_year": 2013,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2013-10-15",
+     "harvest_date": "2014-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4210.6,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4210.6,
+      "water_productivity_kg_m3": 0.95,
+      "deep_percolation_mm": 243.05,
+      "runoff_mm": 151.05,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2014-02-10",
+     "harvest_date": "2014-06-14",
+     "yield_kg_ha": 5106.5,
+     "indicators": {
+      "crop_water_use_m3_ha": 3640.4,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3640.4,
+      "water_productivity_kg_m3": 1.403,
+      "deep_percolation_mm": 484.0,
+      "runoff_mm": 239.34,
+      "water_stress_days": 43,
+      "severe_stress_days": 20,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 85.11,
+      "revenue_per_ha": 4680.96,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 880.96,
+      "profit_total": 880.96,
+      "margin_pct": 18.8,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 7851.0,
+   "profit_per_ha": 3714.29
+  },
+  {
+   "agricultural_year": 2014,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2014-10-15",
+     "harvest_date": "2015-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4151.0,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4151.0,
+      "water_productivity_kg_m3": 0.964,
+      "deep_percolation_mm": 306.63,
+      "runoff_mm": 100.24,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2015-02-10",
+     "harvest_date": "2015-06-14",
+     "yield_kg_ha": 4491.1,
+     "indicators": {
+      "crop_water_use_m3_ha": 3196.2,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3196.2,
+      "water_productivity_kg_m3": 1.405,
+      "deep_percolation_mm": 125.71,
+      "runoff_mm": 12.94,
+      "water_stress_days": 56,
+      "severe_stress_days": 37,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 74.85,
+      "revenue_per_ha": 4116.84,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 316.84,
+      "profit_total": 316.84,
+      "margin_pct": 7.7,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 7347.2,
+   "profit_per_ha": 3150.17
+  },
+  {
+   "agricultural_year": 2015,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2015-10-15",
+     "harvest_date": "2016-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4177.0,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4177.0,
+      "water_productivity_kg_m3": 0.958,
+      "deep_percolation_mm": 269.65,
+      "runoff_mm": 75.5,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2016-02-10",
+     "harvest_date": "2016-06-13",
+     "yield_kg_ha": 5963.1,
+     "indicators": {
+      "crop_water_use_m3_ha": 4243.9,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4243.9,
+      "water_productivity_kg_m3": 1.405,
+      "deep_percolation_mm": 287.1,
+      "runoff_mm": 82.07,
+      "water_stress_days": 9,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 99.39,
+      "revenue_per_ha": 5466.18,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1666.18,
+      "profit_total": 1666.18,
+      "margin_pct": 30.5,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8420.9,
+   "profit_per_ha": 4499.51
+  },
+  {
+   "agricultural_year": 2016,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2016-10-15",
+     "harvest_date": "2017-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4080.3,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4080.3,
+      "water_productivity_kg_m3": 0.98,
+      "deep_percolation_mm": 352.79,
+      "runoff_mm": 125.8,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2017-02-10",
+     "harvest_date": "2017-06-14",
+     "yield_kg_ha": 6000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4226.8,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4226.8,
+      "water_productivity_kg_m3": 1.42,
+      "deep_percolation_mm": 142.95,
+      "runoff_mm": 91.98,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 100.0,
+      "revenue_per_ha": 5500.0,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1700.0,
+      "profit_total": 1700.0,
+      "margin_pct": 30.9,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8307.1,
+   "profit_per_ha": 4533.33
+  },
+  {
+   "agricultural_year": 2017,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2017-10-15",
+     "harvest_date": "2018-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4080.5,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4080.5,
+      "water_productivity_kg_m3": 0.98,
+      "deep_percolation_mm": 218.92,
+      "runoff_mm": 133.81,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2018-02-10",
+     "harvest_date": "2018-06-14",
+     "yield_kg_ha": 5226.8,
+     "indicators": {
+      "crop_water_use_m3_ha": 3594.4,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3594.4,
+      "water_productivity_kg_m3": 1.454,
+      "deep_percolation_mm": 211.29,
+      "runoff_mm": 46.86,
+      "water_stress_days": 36,
+      "severe_stress_days": 27,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 87.11,
+      "revenue_per_ha": 4791.23,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 991.23,
+      "profit_total": 991.23,
+      "margin_pct": 20.7,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 7674.9,
+   "profit_per_ha": 3824.56
+  },
+  {
+   "agricultural_year": 2018,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2018-10-15",
+     "harvest_date": "2019-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4128.1,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4128.1,
+      "water_productivity_kg_m3": 0.969,
+      "deep_percolation_mm": 239.33,
+      "runoff_mm": 79.37,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2019-02-10",
+     "harvest_date": "2019-06-14",
+     "yield_kg_ha": 6000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4263.8,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4263.8,
+      "water_productivity_kg_m3": 1.407,
+      "deep_percolation_mm": 154.82,
+      "runoff_mm": 65.13,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 100.0,
+      "revenue_per_ha": 5500.0,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1700.0,
+      "profit_total": 1700.0,
+      "margin_pct": 30.9,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8391.9,
+   "profit_per_ha": 4533.33
+  },
+  {
+   "agricultural_year": 2019,
+   "crops": [
+    {
+     "crop": "soy",
+     "sowing_date": "2019-10-15",
+     "harvest_date": "2020-02-11",
+     "yield_kg_ha": 4000.0,
+     "indicators": {
+      "crop_water_use_m3_ha": 4155.0,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 4155.0,
+      "water_productivity_kg_m3": 0.963,
+      "deep_percolation_mm": 548.35,
+      "runoff_mm": 181.17,
+      "water_stress_days": 0,
+      "severe_stress_days": 0,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 82
+     },
+     "economics": {
+      "bags_per_ha": 66.67,
+      "revenue_per_ha": 7333.33,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 4500.0,
+      "profit_per_ha": 2833.33,
+      "profit_total": 2833.33,
+      "margin_pct": 38.6,
+      "breakeven_bags_per_ha": 40.91
+     }
+    },
+    {
+     "crop": "maize_safrinha",
+     "sowing_date": "2020-02-10",
+     "harvest_date": "2020-06-13",
+     "yield_kg_ha": 5543.1,
+     "indicators": {
+      "crop_water_use_m3_ha": 3856.4,
+      "blue_water_m3_ha": 0.0,
+      "green_water_m3_ha": 3856.4,
+      "water_productivity_kg_m3": 1.437,
+      "deep_percolation_mm": 341.13,
+      "runoff_mm": 174.96,
+      "water_stress_days": 35,
+      "severe_stress_days": 6,
+      "heat_stress_days_flowering": 0,
+      "soil_cover_days": 71
+     },
+     "economics": {
+      "bags_per_ha": 92.39,
+      "revenue_per_ha": 5081.18,
+      "irrigation_cost_per_ha": 0.0,
+      "total_cost_per_ha": 3800.0,
+      "profit_per_ha": 1281.18,
+      "profit_total": 1281.18,
+      "margin_pct": 25.2,
+      "breakeven_bags_per_ha": 69.09
+     }
+    }
+   ],
+   "soil_cover_days_per_365": 153,
+   "exposed_soil_days_proxy": 212,
+   "water_use_m3_ha": 8011.4,
+   "profit_per_ha": 4114.51
+  }
+ ],
+ "summary": {
+  "soil_cover_days": {
+   "p10": 153.0,
+   "p50": 153.0,
+   "p90": 153.0,
+   "mean": 153.0,
+   "min": 153,
+   "max": 153
+  },
+  "water_use_m3_ha": {
+   "p10": 7541.1,
+   "p50": 8043.9,
+   "p90": 8397.7,
+   "mean": 8020.04,
+   "min": 7347.2,
+   "max": 8480.0
+  },
+  "profit_per_ha": {
+   "p10": 3382.88,
+   "p50": 4160.52,
+   "p90": 4533.33,
+   "mean": 4084.71,
+   "min": 3150.17,
+   "max": 4533.33
+  },
+  "probability_of_loss": 0.0
+ },
+ "skipped_years": []
+}
