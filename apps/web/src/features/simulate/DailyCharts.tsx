@@ -2,7 +2,7 @@
 // - nunca dois eixos Y: fração/Ks (0–1) e chuva/irrigação (mm) são DOIS gráficos com o mesmo eixo X (DAS);
 // - cor segue a entidade (slots fixos, validados com validate_palette.js em claro/escuro);
 // - legenda com nomes + tabela equivalente (alívio para o aqua < 3:1 no tema claro).
-import { useMemo } from "react";
+import { useMemo, type MouseEvent } from "react";
 import {
   Bar, CartesianGrid, ComposedChart, Line, ReferenceArea, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
@@ -88,9 +88,17 @@ export function DailyCharts({ response, rep, das, onDasChange }: Props) {
                    fill={i % 2 ? "var(--phase-b)" : "var(--phase-a)"} fillOpacity={1} strokeOpacity={0} />
   ));
   const cursor = das != null && <ReferenceLine x={das} stroke="var(--text-secondary)" strokeWidth={1.5} ifOverflow="hidden" />;
-  const click = (s: { activeLabel?: unknown } | null | undefined) => {
-    const v = Number(s?.activeLabel);
-    if (Number.isFinite(v) && byDas.has(v)) onDasChange(v);
+  // DAS pela posição do clique/toque na área de plotagem (eixo numérico [first,last], margens conhecidas).
+  // Não usa activeLabel do recharts: ele reflete o último hover e fica um passo atrasado em toque (sem hover).
+  const click = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const plotLeft = rect.left + Y_AXIS_W + MARGIN.left;
+    const plotW = rect.width - Y_AXIS_W - MARGIN.left - MARGIN.right;
+    if (plotW <= 0) return;
+    const frac = (e.clientX - plotLeft) / plotW;
+    if (frac < -0.02 || frac > 1.02) return; // clique no eixo Y: ignora
+    const v = Math.round(first + Math.min(1, Math.max(0, frac)) * (last - first));
+    if (byDas.has(v)) onDasChange(v);
   };
   const tooltip = <Tooltip content={(p) => <DailyTooltip active={p.active} das={p.label} byDas={byDas} />}
                            cursor={{ stroke: "var(--axis)", strokeWidth: 1 }} isAnimationActive={false} />;
@@ -100,7 +108,7 @@ export function DailyCharts({ response, rep, das, onDasChange }: Props) {
     <div className="daily-charts">
       <p className="hint">
         Safra {seasonLabel(season.daily)} ({rep === "typical" ? "rendimento mais próximo do P50" : "rendimento mais próximo do P10"}).
-        Clique no gráfico para escolher o dia. Eixo X: dias após a semeadura (DAS).
+        Clique no gráfico para levar o 3D a esse dia. Eixo X: dias após a semeadura (DAS).
       </p>
 
       <div className="chart-block">
@@ -110,8 +118,9 @@ export function DailyCharts({ response, rep, das, onDasChange }: Props) {
           <span><i className="sw sw--threshold" />Limiar de estresse (1 − RAW/TAW)</span>
         </div>
         <PhaseStrip spans={spans} first={first} last={last} />
+        <div className="chart-click" onClick={click}>
         <ResponsiveContainer width="100%" height={230}>
-          <ComposedChart data={rows} syncId="daily" margin={MARGIN} onClick={click}>
+          <ComposedChart data={rows} syncId="daily" margin={MARGIN}>
             {bands}
             <CartesianGrid vertical={false} stroke="var(--grid)" />
             {xAxis}
@@ -127,6 +136,7 @@ export function DailyCharts({ response, rep, das, onDasChange }: Props) {
             {cursor}
           </ComposedChart>
         </ResponsiveContainer>
+        </div>
       </div>
 
       <div className="chart-block">
@@ -134,8 +144,9 @@ export function DailyCharts({ response, rep, das, onDasChange }: Props) {
           <span><i className="sw sw--rain" />Chuva (mm/dia)</span>
           <span><i className="sw sw--irr" />Irrigação líquida (mm/dia){hasIrrigation ? "" : " — nenhuma neste ano"}</span>
         </div>
+        <div className="chart-click" onClick={click}>
         <ResponsiveContainer width="100%" height={150}>
-          <ComposedChart data={rows} syncId="daily" margin={MARGIN} onClick={click} barCategoryGap={1}>
+          <ComposedChart data={rows} syncId="daily" margin={MARGIN} barCategoryGap={1}>
             {bands}
             <CartesianGrid vertical={false} stroke="var(--grid)" />
             {xAxis}
@@ -148,6 +159,7 @@ export function DailyCharts({ response, rep, das, onDasChange }: Props) {
             {cursor}
           </ComposedChart>
         </ResponsiveContainer>
+        </div>
       </div>
 
       <details className="table-view">

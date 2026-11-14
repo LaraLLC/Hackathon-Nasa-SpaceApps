@@ -3,7 +3,11 @@ import type { CatalogResponse } from "../../api/simulation.types";
 import { createDataSource, type DataSource, type DemoPackIndex } from "../../data/dataSource";
 import { Comparisons } from "./Comparisons";
 import { DailyCharts, RepToggle } from "./DailyCharts";
-import type { RepKey } from "./daily";
+import { seasonLabel, type RepKey } from "./daily";
+import { TimelineControls } from "../twin/TimelineControls";
+import { TwinSection } from "../twin/TwinSection";
+import { defaultDas } from "../twin/twinModel";
+import { usePlayback } from "../twin/usePlayback";
 import { DEFAULT_FORM, toRequest, type FormState } from "./formState";
 import { PercentileCards } from "./PercentileCards";
 import { ResultHeader, WarningsPanel } from "./ResultHeader";
@@ -31,6 +35,14 @@ export function SimulatePage() {
   const [das, setDas] = useState<number | null>(null);
   const { state, run } = useSimulation(source);
 
+  // Linha do tempo compartilhada: 3D, corte 2D, os dois sliders e o clique nos gráficos usam o MESMO `das`.
+  const season = state.result?.response.representative_seasons?.[rep];
+  const daily = useMemo(() => season?.daily ?? [], [season]);
+  const days = useMemo(() => daily.map((d) => d.das), [daily]);
+  const currentDas = das ?? defaultDas(daily);
+  const playback = usePlayback(days, currentDas, setDas);
+  const seekByUser = (d: number) => { playback.stop(); setDas(d); };
+
   // Grade (fixture) ou catálogo (api) para rotular o formulário; falha aqui não bloqueia a simulação.
   useEffect(() => {
     if (!source) return;
@@ -50,6 +62,7 @@ export function SimulatePage() {
   }
 
   const submit = () => {
+    playback.stop();
     setDas(null);
     run(toRequest(form, source.kind));
   };
@@ -83,12 +96,21 @@ export function SimulatePage() {
               <>
                 <WarningsPanel result={result} />
                 <PercentileCards response={response} />
-                <section aria-labelledby="daily-h">
+                <section aria-labelledby="daily-h" className="twin-and-charts">
                   <div className="section-head">
-                    <h3 id="daily-h" className="section-title">Água no solo, dia a dia</h3>
-                    <RepToggle response={response} rep={rep} onChange={(r) => { setRep(r); setDas(null); }} />
+                    <h3 id="daily-h" className="section-title">Gêmeo digital e água no solo, dia a dia</h3>
+                    <RepToggle response={response} rep={rep} onChange={(r) => { playback.stop(); setRep(r); setDas(null); }} />
                   </div>
-                  <DailyCharts response={response} rep={rep} das={das} onDasChange={setDas} />
+                  {currentDas != null && (
+                    <TwinSection crop={response.crop?.key ?? response.request?.crop ?? "soy"} seasonLabel={seasonLabel(daily)}
+                                 daily={daily} das={currentDas} onDasChange={setDas} playing={playback.playing}
+                                 onTogglePlay={playback.toggle} onUserSeek={playback.stop} />
+                  )}
+                  {currentDas != null && (
+                    <TimelineControls id="das-charts" compact daily={daily} das={currentDas} onChange={setDas}
+                                      playing={playback.playing} onTogglePlay={playback.toggle} onUserSeek={playback.stop} />
+                  )}
+                  <DailyCharts response={response} rep={rep} das={currentDas} onDasChange={seekByUser} />
                 </section>
                 <Comparisons response={response} />
               </>
