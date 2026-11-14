@@ -1,13 +1,15 @@
 // Etapa 1: casca mínima que só prova a fonte de dados. A aba "Simular" entra na Etapa 2.
 import { useEffect, useMemo, useState } from "react";
-import { createDataSource, type SimulationResult } from "./data/dataSource";
+import { createDataSource, ScenarioNotPrecomputedError, type SimulationResult } from "./data/dataSource";
 import { SimulationApiError } from "./api/simulationApi";
 import type { SimulationRequest } from "./api/simulation.types";
 
+// ?sow=MM-DD permite testar uma data fora da grade do demo-pack.
+const PROBE_SOW = new URLSearchParams(window.location.search).get("sow") ?? "10-20";
 const PROBE_REQUEST: SimulationRequest = {
   location: { lat: -18.92, lon: -48.28, area_id: "3170206" },
   crop: "soy",
-  sowing_date: "10-20",
+  sowing_date: PROBE_SOW,
   first_year: 2001,
   last_year: 2024,
   soil: "clay",
@@ -41,7 +43,9 @@ export default function App() {
       .then((result) => setState({ kind: "ready", result }))
       .catch((e: unknown) => {
         if (ctrl.signal.aborted) return;
-        const msg = e instanceof SimulationApiError ? `${e.kind}: ${e.message}` : e instanceof Error ? e.message : String(e);
+        const msg = e instanceof SimulationApiError ? `${e.kind}: ${e.message}`
+          : e instanceof ScenarioNotPrecomputedError ? `${e.message} (${e.reasons.join("; ")})`
+          : e instanceof Error ? e.message : String(e);
         setState({ kind: "error", message: msg });
       });
     return () => ctrl.abort();
@@ -61,8 +65,7 @@ export default function App() {
           <dt>NASA POWER</dt><dd>{state.result.provenance.nasaPower ? "sim" : "NÃO — dados sintéticos"}</dd>
           <dt>safras</dt><dd>{state.result.response.summary?.n_seasons ?? "—"}</dd>
           <dt>rendimento P50 (kg/ha)</dt><dd>{state.result.response.summary?.yield_kg_ha.p50 ?? "—"}</dd>
-          <dt>divergências do fixture</dt>
-          <dd>{state.result.provenance.fixtureMismatches.join(", ") || "nenhuma"}</dd>
+          <dt>arquivo</dt><dd>{state.result.provenance.location}</dd>
         </dl>
       )}
     </main>
