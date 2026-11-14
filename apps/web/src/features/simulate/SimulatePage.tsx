@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import type { CatalogResponse } from "../../api/simulation.types";
 import { createDataSource, type DataSource, type DemoPackIndex } from "../../data/dataSource";
 import { Comparisons } from "./Comparisons";
@@ -14,6 +14,9 @@ import { ResultHeader, WarningsPanel } from "./ResultHeader";
 import { SimulationForm } from "./SimulationForm";
 import { StatusMessage } from "./StatusMessage";
 import { useSimulation } from "./useSimulation";
+
+// react-markdown + remark-gfm (~170 kB) só baixam quando a seção de relatórios aparece.
+const ReportPanel = lazy(() => import("../report/ReportPanel").then((m) => ({ default: m.ReportPanel })));
 
 function useDataSource(): DataSource | Error {
   return useMemo(() => {
@@ -113,6 +116,9 @@ export function SimulatePage() {
                   <DailyCharts response={response} rep={rep} das={currentDas} onDasChange={seekByUser} />
                 </section>
                 <Comparisons response={response} />
+                <Suspense fallback={<p className="status status--loading" role="status">Carregando relatórios…</p>}>
+                  <ReportPanel key={`${response.generated_at}|${result.provenance.location}`} source={source} result={result} />
+                </Suspense>
               </>
             )}
             {response.status === "no_data" && <WarningsPanel result={result} />}

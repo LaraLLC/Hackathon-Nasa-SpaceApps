@@ -8,10 +8,12 @@
 
 import { createSimulationApi, type SimulationApi } from "../api/simulationApi";
 import type {
-  CatalogResponse, CropKey, IrrigationMode, SimulationRequest, SimulationResponse, SoilKey,
+  CatalogResponse, CropKey, IrrigationMode, ReportKind, ReportLang, SimulationRequest, SimulationResponse, SoilKey,
 } from "../api/simulation.types";
 
 export type DataSourceKind = "fixture" | "api";
+
+export type ReportFiles = Record<ReportKind, Record<ReportLang, string>>;
 
 export interface Provenance {
   kind: DataSourceKind;
@@ -20,6 +22,8 @@ export interface Provenance {
   location: string;
   /** Lido de data_version da resposta (não presumido pelo modo). */
   nasaPower: boolean;
+  /** Modo fixture: relatórios pré-gerados pelo reports.py ao lado do JSON. */
+  reportFiles?: ReportFiles;
 }
 
 export interface SimulationResult {
@@ -35,6 +39,8 @@ export interface DemoPackEntry {
   file: string; crop: CropKey; sowing_date: string; soil: SoilKey;
   climate: string; precip_delta_pct: number; temp_delta_c: number; irrigation: IrrigationMode;
   status: string; n_seasons: number | null; yield_p50_kg_ha: number | null; bytes: number; sha256: string;
+  /** Ausente em demo-packs gerados antes da Etapa 4. */
+  reports?: ReportFiles;
 }
 
 export interface DemoPackIndex {
@@ -85,8 +91,13 @@ export interface DataSource {
   catalog(signal?: AbortSignal): Promise<CatalogResponse | null>;
   /** Grade do demo-pack (modo fixture); null em modo api (sem restrição de grade). */
   grid(signal?: AbortSignal): Promise<DemoPackIndex | null>;
-  /** Cliente da API (relatórios); null em modo fixture. */
+  /** Cliente da API; null em modo fixture. */
   api: SimulationApi | null;
+  /**
+   * Markdown do relatório. Fixture: .md pré-gerado pelo reports.py; API: POST /report.
+   * Mesmo gerador nos dois modos → texto idêntico.
+   */
+  report(result: SimulationResult, kind: ReportKind, lang: ReportLang, signal?: AbortSignal): Promise<string>;
 }
 
 function isNasaPower(res: SimulationResponse): boolean {
@@ -144,14 +155,14 @@ function abortable<T>(p: Promise<T>, signal?: AbortSignal): Promise<T> {
 }
 
 /** Cache por URL. Não recebe o signal do chamador (senão um abort — ex.: StrictMode — envenena o cache). */
-function cachedJson(fetchImpl: typeof fetch) {
+function cachedFetch(fetchImpl: typeof fetch, as: "json" | "text") {
   const cache = new Map<string, Promise<unknown>>();
   return <T,>(url: string): Promise<T> => {
     let p = cache.get(url);
     if (!p) {
       p = fetchImpl(url).then(async (r) => {
         if (!r.ok) throw new Error(`Arquivo do demo-pack não encontrado (${url}, HTTP ${r.status})`);
-        return r.json();
+        return as === "json" ? r.json() : r.text();
       });
       p.catch(() => cache.delete(url));
       cache.set(url, p);
@@ -161,7 +172,8 @@ function cachedJson(fetchImpl: typeof fetch) {
 }
 
 function fixtureSource(fetchImpl: typeof fetch = (...a) => fetch(...a)): DataSource {
-  const getJson = cachedJson(fetchImpl);
+  const getJson = cachedFetch(fetchImpl, "json");
+  const getText = cachedFetch(fetchImpl, "text");
   const loadIndex = () => getJson<DemoPackIndex>(`${DEMO_PACK_BASE}/index.json`);
   return {
     kind: "fixture",
@@ -169,6 +181,11 @@ function fixtureSource(fetchImpl: typeof fetch = (...a) => fetch(...a)): DataSou
     describe: () => `demo-pack: ${DEMO_PACK_BASE}/`,
     grid: (signal) => abortable(loadIndex(), signal),
     catalog: async () => null,
+    async report(result, kind, lang, signal) {
+      const file = result.provenance.reportFiles?.[kind]?.[lang];
+      if (!file) throw new Error("Relatório não pré-gerado neste demo-pack (rode export_demo_pack.py de novo).");
+      return abortable(getText<string>(`${DEMO_PACK_BASE}/${file}`), signal);
+    },
     async simulate(req, signal) {
       const index = await abortable(loadIndex(), signal);
       const match = matchDemoPack(index, req);
@@ -183,7 +200,8 @@ function fixtureSource(fetchImpl: typeof fetch = (...a) => fetch(...a)): DataSou
       }
       return {
         response,
-        provenance: { kind: "fixture", label: "Pré-calculado (demo-pack)", location: url, nasaPower: isNasaPower(response) },
+        provenance: { kind: "fixture", label: "Pré-calculado (demo-pack)", location: url, nasaPower: isNasaPower(response),
+                      reportFiles: match.reports },
       };
     },
   };
@@ -196,6 +214,7 @@ function apiSource(api: SimulationApi, baseUrl: string): DataSource {
     describe: () => `api: ${baseUrl}`,
     grid: async () => null,
     catalog: (signal) => api.catalog({ signal }),
+    report: (result, kind, lang, signal) => api.report(kind, result.response, { lang, signal }),
     async simulate(req, signal) {
       const response = await api.simulate(req, { signal });
       return { response, provenance: { kind: "api", label: "API Gaiapus (ao vivo)", location: baseUrl,

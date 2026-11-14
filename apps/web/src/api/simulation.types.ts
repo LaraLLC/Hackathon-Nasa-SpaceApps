@@ -78,6 +78,21 @@ export interface ComparisonItem {
 
 export interface ProbabilityOfLossComparison { baseline: number; scenario: number; delta: number }
 
+/** Proveniência do clima para relatórios/submissão. Com `synthetic: true` só vêm provider e retrieved_at. */
+export interface DataAccess {
+  provider: string; // "NASA POWER" | "synthetic_test"
+  synthetic: boolean;
+  retrieved_at: string; // ISO; data de acesso à API (gravada no cache)
+  product?: string;
+  parameters?: string[];
+  start?: string;
+  end?: string;
+  resolution?: string;
+  api_url?: string;
+  docs_url?: string;
+  request_url?: string; // requisição reprodutível
+}
+
 export interface SimulationResponse {
   status: "ok" | "no_data";
   area_id: string | null;
@@ -90,9 +105,13 @@ export interface SimulationResponse {
   engine: string;
   scenario_type: string;
   warnings: string[];
+  /** Proveniência do clima (aditivo). Ausente em respostas antigas. */
+  data_access?: DataAccess;
   request?: SimulationRequest; // eco da requisição validada (com defaults aplicados)
   crop?: { key: CropKey; name_pt: string; name_en: string; status: CropStatus;
-           cycle_days: number; stage_days: number[] };
+           cycle_days: number; stage_days: number[];
+           /** Ym efetivamente usado (aditivo). */
+           reference_yield_kg_ha?: number };
   soil?: { key: SoilKey; name_pt: string; theta_fc: number; theta_wp: number; curve_number: number;
            available_water_mm_per_m: number };
   scenario?: { label: string; precip_delta_pct: number; temp_delta_c: number };
@@ -166,6 +185,7 @@ export interface RotationResponse {
   engine: string;
   scenario_type: string;
   warnings: string[];
+  data_access?: DataAccess;
   plan: RotationItem[];
   seasons: RotationSeason[];
   summary: { soil_cover_days?: Dist; water_use_m3_ha?: Dist; profit_per_ha?: Dist; probability_of_loss?: number };

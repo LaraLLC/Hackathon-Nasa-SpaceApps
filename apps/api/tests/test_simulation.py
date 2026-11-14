@@ -93,6 +93,45 @@ def test_comparison_has_p10_and_mean():
     assert "P10 " in build_report(out, "commercial")
 
 
+def test_data_access_and_report_header_synthetic():
+    out = simulate(_req())
+    assert out["data_access"]["synthetic"] is True
+    for kind in ("technical", "commercial"):
+        pt = build_report(out, kind, lang="pt")
+        en = build_report(out, kind, lang="en")
+        assert "DADOS SINTÉTICOS" in pt and "SYNTHETIC TEST DATA" in en
+        assert "## Dados NASA utilizados" in pt and "## NASA data used" in en
+        assert "Nenhum dado NASA" in pt  # sintético: não finge ter usado NASA
+        assert f"model_version `{out['model_version']}`" in pt and out["data_version"] in pt
+
+
+def test_report_nasa_section_with_real_like_series():
+    raw = {"geometry": {"coordinates": [LON, LAT, 870.0]}, "_retrieved_at": "2026-11-14T10:00:00+00:00",
+           "properties": {"parameter": {p: {} for p in
+                                        ("T2M_MAX", "T2M_MIN", "RH2M", "WS2M", "ALLSKY_SFC_SW_DWN", "PRECTOTCORR")}}}
+    d = date(2001, 1, 1)
+    while d <= date(2002, 12, 31):
+        k = d.strftime("%Y%m%d")
+        for p, v in (("T2M_MAX", 30), ("T2M_MIN", 18), ("RH2M", 70), ("WS2M", 2), ("ALLSKY_SFC_SW_DWN", 20),
+                     ("PRECTOTCORR", 5)):
+            raw["properties"]["parameter"][p][k] = v
+        d += timedelta(days=1)
+    series = parse_power_json(raw, LAT, LON)
+    out = simulate(_req(first_year=2001, last_year=2001), series=series)
+    da = out["data_access"]
+    assert da["synthetic"] is False and da["retrieved_at"].startswith("2026-11-14")
+    assert da["request_url"].startswith("https://power.larc.nasa.gov/api/temporal/daily/point?")
+    assert "PRECTOTCORR" in da["request_url"] and "community=AG" in da["request_url"]
+    for kind in ("technical", "commercial"):
+        pt = build_report(out, kind, lang="pt")
+        assert "Fonte do clima: NASA POWER" in pt
+        assert "**Data de acesso:** 2026-11-14" in pt
+        assert "<https://power.larc.nasa.gov/api/temporal/daily/point>" in pt
+        assert "`PRECTOTCORR`" in pt and "~0.5°" in pt
+        en = build_report(out, kind, lang="en")
+        assert "## NASA data used" in en and "**Access date:** 2026-11-14" in en
+
+
 def test_report_accepts_legacy_comparison_without_p10():
     out = simulate(_req(climate={"precip_delta_pct": -20}))
     for comp in out["comparisons"].values():
@@ -101,6 +140,12 @@ def test_report_accepts_legacy_comparison_without_p10():
                 del v[k]
     assert "—" in build_report(out, "technical")
     assert build_report(out, "commercial").startswith("#")
+
+
+def test_report_reference_yield_is_exact():
+    out = simulate(_req(crop="maize_safrinha", sowing_date="03-10", soil="loam", climate={"precip_delta_pct": -20}))
+    assert out["crop"]["reference_yield_kg_ha"] == CROPS["maize_safrinha"].reference_yield_kg_ha
+    assert f"Rendimento de referência: {CROPS['maize_safrinha'].reference_yield_kg_ha:.0f} kg/ha" in build_report(out, "technical")
 
 
 def test_coffee_flagged_conceptual():

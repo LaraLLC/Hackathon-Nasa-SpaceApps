@@ -63,11 +63,15 @@ Pragas, doenças, nutrição, geada, encharcamento, efeito direto de calor no re
 ```
 (preço e custo são exemplos zerados: a equipe informa valores reais e cita a fonte.)
 
-Resposta: os campos comuns do contrato (`status`, `area_id`, `spatial_scope`, `data_version`, `source_refs`, `observed_through`, `generated_at`, `model_version`, `scenario_type`, `warnings`) + `crop`, `soil`, `assumptions`, `indicator_methods`, `summary`, `seasons[]`, `representative_seasons.{typical,dry}.daily[]` e `comparisons`.
+Resposta: os campos comuns do contrato (`status`, `area_id`, `spatial_scope`, `data_version`, `source_refs`, `observed_through`, `generated_at`, `model_version`, `scenario_type`, `warnings`, `data_access`) + `crop`, `soil`, `assumptions`, `indicator_methods`, `summary`, `seasons[]`, `representative_seasons.{typical,dry}.daily[]` e `comparisons`.
+
+`data_access` (aditivo): proveniência do clima para relatórios e submissão — `provider`, `synthetic`, `parameters`, `start`/`end`, `resolution`, `retrieved_at` (data de acesso gravada no cache), `api_url`, `docs_url` e `request_url` (requisição reprodutível). `crop.reference_yield_kg_ha` (aditivo) é o Ym efetivamente usado.
+
+`comparisons.*.*` traz, além de `baseline_p50`/`scenario_p50`/`delta`/`delta_pct`, os campos `baseline_p10`/`scenario_p10`/`delta_p10` e `baseline_mean`/`scenario_mean`/`delta_mean` (percentis de cada distribuição, não pareados).
 
 `POST /v1/simulations/rotation` recebe um `plan` de 1–3 culturas (ex.: soja 10-15 → milho safrinha 02-15). A umidade do solo é transferida de uma cultura para a seguinte. Retorna lucro anual somado, dias de solo coberto, água total e probabilidade de prejuízo.
 
-`POST /v1/simulations/report?lang=pt|en` com `{kind: "technical"|"commercial", result: <resposta>, farm_name}` retorna Markdown.
+`POST /v1/simulations/report?lang=pt|en` com `{kind: "technical"|"commercial", result: <resposta>, farm_name}` retorna Markdown. Os dois relatórios têm cabeçalho com selo da fonte (NASA POWER / SINTÉTICO), `generated_at`, `model_version` e `data_version`, e a seção "Dados NASA utilizados" / "NASA data used". O demo-pack (`apps/api/scripts/export_demo_pack.py`) grava os mesmos 4 relatórios (técnico/comercial × pt/en) ao lado de cada JSON, gerados pela mesma função.
 
 Erros: 422 para entrada inválida, 503 para NASA POWER indisponível e `status: "no_data"` quando não há safra completa no período.
 

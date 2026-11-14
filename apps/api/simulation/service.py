@@ -4,6 +4,7 @@ from __future__ import annotations
 import os
 from dataclasses import asdict
 from datetime import date, datetime, timezone
+from urllib.parse import urlencode
 
 from .crops import get_crop
 from .economics import EconomicInputs
@@ -12,7 +13,9 @@ from .impact import INDICATOR_METHODS
 from .scenarios import ScenarioSpec, compare, run_ensemble, run_rotation
 from .schemas import RotationRequest, SimulationRequest
 from .soil import get_soil
-from .weather import WeatherSeries, fetch_nasa_power, synthetic_series
+from .weather import POWER_PARAMS, POWER_URL, WeatherSeries, fetch_nasa_power, synthetic_series
+
+POWER_DOCS_URL = "https://power.larc.nasa.gov/docs/services/api/temporal/daily/"
 
 MODEL_VERSION = "gaiapus-sim-0.1.0"
 ENGINE_DESCRIPTION = ("FAO-56 Penman-Monteith ET0 + balanço hídrico diário (Kc único) + "
@@ -50,6 +53,30 @@ def _mgmt(m) -> ManagementOptions:
                              m.initial_theta_m3_m3)
 
 
+def _data_access(series: WeatherSeries) -> dict:
+    """Proveniência do clima para relatórios e submissão (campo aditivo do contrato)."""
+    if series.source != "nasa_power":
+        return {"provider": series.source, "synthetic": True, "retrieved_at": series.retrieved_at}
+    query = urlencode({
+        "parameters": ",".join(POWER_PARAMS), "community": "AG",
+        "latitude": f"{series.lat:.4f}", "longitude": f"{series.lon:.4f}",
+        "start": series.first_day.strftime("%Y%m%d"), "end": series.last_day.strftime("%Y%m%d"), "format": "JSON",
+    }, safe=",")  # vírgulas legíveis na lista de parâmetros (URL continua válida)
+    return {
+        "provider": "NASA POWER",
+        "synthetic": False,
+        "product": "NASA POWER Daily API (temporal/daily/point), community=AG",
+        "parameters": list(POWER_PARAMS),
+        "start": series.first_day.isoformat(),
+        "end": series.last_day.isoformat(),
+        "resolution": "~0.5° x 0.625° (MERRA-2)",
+        "retrieved_at": series.retrieved_at,
+        "api_url": POWER_URL,
+        "docs_url": POWER_DOCS_URL,
+        "request_url": f"{POWER_URL}?{query}",
+    }
+
+
 def _common(series: WeatherSeries, area_id, status: str, warnings: list[str], scenario_type: str) -> dict:
     return {
         "status": status,
@@ -65,6 +92,7 @@ def _common(series: WeatherSeries, area_id, status: str, warnings: list[str], sc
         "engine": ENGINE_DESCRIPTION,
         "scenario_type": scenario_type,
         "warnings": warnings,
+        "data_access": _data_access(series),
     }
 
 
@@ -106,7 +134,9 @@ def simulate(req: SimulationRequest, series: WeatherSeries | None = None) -> dic
     out.update({
         "request": req.model_dump(),
         "crop": {"key": crop.key, "name_pt": crop.name_pt, "name_en": crop.name_en, "status": crop.status,
-                 "cycle_days": crop.cycle_days, "stage_days": crop.stage_days},
+                 "cycle_days": crop.cycle_days, "stage_days": crop.stage_days,
+                 # Ym efetivamente usado (pedido ou padrão da cultura) — campo aditivo
+                 "reference_yield_kg_ha": req.reference_yield_kg_ha or crop.reference_yield_kg_ha},
         "soil": asdict(soil) | {"available_water_mm_per_m": soil.available_water_mm_per_m},
         "assumptions": list(crop.assumptions) + [
             f"Solo '{soil.name_pt}': CC {soil.theta_fc}, PMP {soil.theta_wp} m³/m³, CN {soil.curve_number} (FAO-56 tab. 19, valores centrais).",

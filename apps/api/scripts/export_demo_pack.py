@@ -10,7 +10,9 @@ Grade (Uberlândia, IBGE 3170206; -18.92, -48.28; safras 2001–2024):
     × clima {baseline, dry_warm (−20 % chuva, +1,5 °C)} × irrigação {rainfed, deficit}
     compare_with_baseline=true, compare_irrigation=true, include_daily=true, economics=null.
 
-Saída: apps/web/public/demo-pack/<crop>_<MMDD>_<clima>_<irrigacao>.json + index.json.
+Saída: apps/web/public/demo-pack/<crop>_<MMDD>_<clima>_<irrigacao>.json + index.json, e para cada JSON
+os 4 relatórios <...>.{technical,commercial}.{pt,en}.md gerados por simulation.reports.build_report
+(o mesmo código da rota /report → texto idêntico no modo fixture e no modo API).
 Café fica de fora (status "conceitual": só no modo API).
 
 Garantias:
@@ -32,6 +34,7 @@ from pathlib import Path
 API_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(API_DIR))
 
+from simulation.reports import build_report  # noqa: E402
 from simulation.schemas import Management, SimulationRequest  # noqa: E402
 from simulation.service import MODEL_VERSION, simulate  # noqa: E402
 from simulation.weather import _cache_path  # noqa: E402
@@ -49,6 +52,8 @@ CLIMATES = {
     "dry_warm": {"precip_delta_pct": -20, "temp_delta_c": 1.5, "label": "dry_warm"},
 }
 IRRIGATION = ["rainfed", "deficit"]
+REPORT_KINDS = ("technical", "commercial")
+REPORT_LANGS = ("pt", "en")
 SIZE_WARN_BYTES = 15 * 1024 * 1024
 
 
@@ -103,13 +108,21 @@ def main() -> int:
             raw = json.dumps(res, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
             (out_dir / name).write_bytes(raw)
             total += len(raw)
+            # Relatórios pelo MESMO build_report da rota POST /v1/simulations/report → texto idêntico nos dois modos.
+            reports: dict[str, dict[str, str]] = {}
+            for kind, lang in product(REPORT_KINDS, REPORT_LANGS):
+                md_name = name.removesuffix(".json") + f".{kind}.{lang}.md"
+                md = build_report(res, kind, lang=lang).encode("utf-8")
+                (out_dir / md_name).write_bytes(md)
+                total += len(md)
+                reports.setdefault(kind, {})[lang] = md_name
             s = res.get("summary", {})
             entries.append({
                 "file": name, "crop": crop, "sowing_date": sowing, "soil": spec["soil"],
                 "climate": clim_key, "precip_delta_pct": clim["precip_delta_pct"], "temp_delta_c": clim["temp_delta_c"],
                 "irrigation": irrigation, "status": res["status"], "n_seasons": s.get("n_seasons"),
                 "yield_p50_kg_ha": s.get("yield_kg_ha", {}).get("p50"),
-                "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(),
+                "bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest(), "reports": reports,
             })
             print(f"{name:45s} {res['status']:7s} n={s.get('n_seasons')}  {len(raw) / 1024:7.1f} KB")
 
