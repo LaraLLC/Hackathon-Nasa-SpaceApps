@@ -30,6 +30,8 @@ export interface ValidationIssue {
   loc: (string | number)[];
   msg: string;
   type?: string;
+  /** Parâmetros do erro (ex.: { gt: 0 }). */
+  ctx?: Record<string, unknown>;
 }
 
 export class SimulationApiError extends Error {

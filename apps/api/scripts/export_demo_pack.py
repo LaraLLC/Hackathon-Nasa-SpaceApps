@@ -131,7 +131,8 @@ def main() -> int:
         "excluded": {"coffee": "status conceitual — disponível só no modo API"},
         "entries": entries,
     }
-    (out_dir / "index.json").write_text(json.dumps(index, ensure_ascii=False, indent=1), encoding="utf-8")
+    (out_dir / "index.json").write_text(json.dumps(index, ensure_ascii=False, indent=1) + "\n", encoding="utf-8",
+                                        newline="\n")  # LF também no Windows
     print(f"\n{len(entries)} arquivos, total {total / 1024 / 1024:.2f} MB em {out_dir}")
     if total > SIZE_WARN_BYTES:
         print("AVISO: demo-pack acima de ~15 MB; considere reduzir seasons[].totals ou arredondar.", file=sys.stderr)

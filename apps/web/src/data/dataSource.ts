@@ -119,8 +119,12 @@ export function matchDemoPack(index: DemoPackIndex, req: SimulationRequest): Dem
   const climKey = Object.entries(index.grid.climates).find(([, c]) => near(c.precip_delta_pct, dp) && near(c.temp_delta_c, dt))?.[0];
   if (!climKey) reasons.push(`clima Δchuva ${dp}% / ΔT ${dt} °C`);
   if (crop) {
-    if ((req.soil ?? "clay") !== crop.soil) reasons.push(`solo ${req.soil} (pré-calculado: ${crop.soil})`);
-    if (!crop.sowing_dates.includes(req.sowing_date)) reasons.push(`semeadura ${req.sowing_date}`);
+    const soilName: Record<SoilKey, string> = { sandy: "arenoso", loam: "médio", clay: "argiloso" };
+    const soil = req.soil ?? "clay";
+    if (soil !== crop.soil) reasons.push(`solo ${soilName[soil]} (pré-calculado para esta cultura: ${soilName[crop.soil]})`);
+    if (!crop.sowing_dates.includes(req.sowing_date)) {
+      reasons.push(`semeadura ${req.sowing_date} (pré-calculadas: ${crop.sowing_dates.join(", ")})`);
+    }
   }
   if (reasons.length) return reasons;
   const entry = index.entries.find((e) => e.crop === req.crop && e.sowing_date === req.sowing_date &&
